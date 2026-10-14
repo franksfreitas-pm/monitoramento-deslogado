@@ -244,11 +244,20 @@
                 };
 
                 // Atualizar bloco de KPIs (Valores Absolutos)
+                const isPreLaunch = new Date().getTime() < new Date('2026-10-15T00:00:00-03:00').getTime();
+
                 const updateKPI = (idPrefix, key) => {
                     const hoje = data.kpis.today[key] || 0;
                     const b30 = data.kpis.baseline30[key] || 0;
                     const b90 = data.kpis.baseline90[key] || 0;
                     
+                    if (isPreLaunch && hoje === 0) {
+                        document.getElementById(`${idPrefix}-hoje`).innerHTML = '<span class="text-lg text-gray-400 font-normal">Aguardando 15/10</span>';
+                        document.getElementById(`${idPrefix}-30d`).innerHTML = '<span class="text-gray-400">-</span>';
+                        document.getElementById(`${idPrefix}-90d`).innerHTML = '<span class="text-gray-400">-</span>';
+                        return;
+                    }
+
                     document.getElementById(`${idPrefix}-hoje`).innerText = fmtNum(hoje);
                     
                     const pct30 = b30 > 0 ? ((hoje - b30) / b30) * 100 : 0;
@@ -270,6 +279,13 @@
                     const b30 = Number(data.funnel.baseline30[key]) || 0;
                     const b90 = Number(data.funnel.baseline90[key]) || 0;
                     
+                    if (isPreLaunch && hoje === 0) {
+                        document.getElementById(`${idPrefix}-hoje`).innerHTML = '<span class="text-2xl text-gray-400 font-normal">Aguardando</span>';
+                        document.getElementById(`${idPrefix}-30d`).innerHTML = '<span class="text-gray-400">-</span>';
+                        document.getElementById(`${idPrefix}-90d`).innerHTML = '<span class="text-gray-400">-</span>';
+                        return;
+                    }
+
                     document.getElementById(`${idPrefix}-hoje`).innerText = hoje.toFixed(1) + '%';
                     
                     const diff30 = hoje - b30;
@@ -286,15 +302,19 @@
                 // Atualizar Tabela de Origem
                 const tbody = document.getElementById('origins-tbody');
                 tbody.innerHTML = '';
-                data.origins.forEach(orig => {
-                    tbody.innerHTML += `
-                        <tr>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${orig.tela}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-right">${fmtNum(orig.volume)}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-primary text-right font-bold">${orig.conversao.toFixed(1)}%</td>
-                        </tr>
-                    `;
-                });
+                if (isPreLaunch) {
+                    tbody.innerHTML = `<tr><td colspan="3" class="px-6 py-8 text-center text-gray-500">Dados começarão a ser populados a partir de 15/10.</td></tr>`;
+                } else {
+                    data.origins.forEach(orig => {
+                        tbody.innerHTML += `
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${orig.tela}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-right">${fmtNum(orig.volume)}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-primary text-right font-bold">${orig.conversao.toFixed(1)}%</td>
+                            </tr>
+                        `;
+                    });
+                }
 
                 // Atualiza timestamp na tela
                 const dt = new Date(data.updatedAt);

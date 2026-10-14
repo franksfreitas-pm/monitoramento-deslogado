@@ -25,9 +25,13 @@ function fetchMixpanel(endpoint) {
     });
 }
 
-// Configuração das Janelas de Tempo (Baseadas em 14/10/2026 sendo Hoje)
+// Configuração das Janelas de Tempo
+const todayStr = new Date().toISOString().split('T')[0];
+// Se hoje for antes do dia 15, travamos a consulta no dia 15 para retornar zerado e não sujar com tráfego pré-deploy.
+const currentTo = todayStr < '2026-10-15' ? '2026-10-15' : todayStr;
+
 const dates = {
-    today: { from: '2026-10-14', to: '2026-10-14', days: 1 },
+    today: { from: '2026-10-15', to: currentTo, days: 1 }, // Começa estritamente no dia 15/10
     baseline30: { from: '2026-09-14', to: '2026-10-13', days: 30 },
     baseline90: { from: '2026-07-15', to: '2026-10-13', days: 90 }
 };
