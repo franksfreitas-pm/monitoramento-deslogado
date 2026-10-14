@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Monitoramento do Fluxo Deslogado</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#FF6B00',
+                        bglight: '#F8F9FA',
+                        cardbg: '#FFFFFF',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #F8F9FA;
+            font-family: 'Inter', sans-serif;
+            color: #333333;
+        }
+        .loading {
+            opacity: 0.5;
+            transition: opacity 0.3s;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Topbar -->
+    <header class="bg-white border-b border-gray-200 py-4 px-8 shadow-sm flex items-center justify-between">
+        <h1 class="text-2xl font-bold text-gray-800"><span class="text-primary">Aqui Ads</span> | Dashboard do Fluxo Deslogado</h1>
+        <div id="last-update" class="text-sm text-gray-500">Carregando dados...</div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-[1600px] mx-auto py-8 px-4 sm:px-6 lg:px-8">
+        
+        <!-- Aviso de Data -->
+        <div class="bg-orange-50 border-l-4 border-primary p-4 mb-8 rounded-r">
+            <p class="text-sm text-gray-800">
+                <strong class="text-primary font-semibold">Importante:</strong> A linha de base reflete as médias fixas de 30 e 90 dias computadas até o dia 13/10. A nova média pós-lançamento começará a ser contabilizada apenas a partir de <strong>15/10</strong>, isolando o dia do deploy (14/10).
+            </p>
+        </div>
+
+        <!-- Bloco 1: KPIs Gerais -->
+        <section class="mb-10">
+            <h2 class="text-xl font-semibold mb-4 text-gray-700">Média das Métricas (Hoje vs Baselines)</h2>
+            <div class="grid grid-cols-5 gap-4">
+                <!-- KPI 1 -->
+                <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100 flex flex-col justify-between">
+                    <h3 class="text-xs font-medium text-gray-500 mb-1 uppercase">Média de buscas</h3>
+                    <div id="kpi-buscas-hoje" class="text-3xl font-bold text-gray-900 mb-4">--</div>
+                    <div class="flex flex-col space-y-1 text-xs">
+                        <div class="flex justify-between border-b border-gray-50 pb-1">
+                            <span class="text-gray-500">vs Média 30d</span>
+                            <span id="kpi-buscas-30d" class="font-medium text-gray-400">--</span>
+                        </div>
+                        <div class="flex justify-between pt-1">
+                            <span class="text-gray-500">vs Média 90d</span>
+                            <span id="kpi-buscas-90d" class="font-medium text-gray-400">--</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- KPI 2 -->
+                <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100 flex flex-col justify-between">
+                    <h3 class="text-xs font-medium text-gray-500 mb-1 uppercase">Adições no carrinho</h3>
+                    <div id="kpi-carrinho-hoje" class="text-3xl font-bold text-gray-900 mb-4">--</div>
+                    <div class="flex flex-col space-y-1 text-xs">
+                        <div class="flex justify-between border-b border-gray-50 pb-1">
+                            <span class="text-gray-500">vs Média 30d</span>
+                            <span id="kpi-carrinho-30d" class="font-medium text-gray-400">--</span>
+                        </div>
+                        <div class="flex justify-between pt-1">
+                            <span class="text-gray-500">vs Média 90d</span>
+                            <span id="kpi-carrinho-90d" class="font-medium text-gray-400">--</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- KPI 3 -->
+                <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100 flex flex-col justify-between">
+                    <h3 class="text-xs font-medium text-gray-500 mb-1 uppercase">Acesso à pág de resumo</h3>
+                    <div id="kpi-resumo-hoje" class="text-3xl font-bold text-gray-900 mb-4">--</div>
+                    <div class="flex flex-col space-y-1 text-xs">
+                        <div class="flex justify-between border-b border-gray-50 pb-1">
+                            <span class="text-gray-500">vs Média 30d</span>
+                            <span id="kpi-resumo-30d" class="font-medium text-gray-400">--</span>
+                        </div>
+                        <div class="flex justify-between pt-1">
+                            <span class="text-gray-500">vs Média 90d</span>
+                            <span id="kpi-resumo-90d" class="font-medium text-gray-400">--</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- KPI 4 -->
+                <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100 flex flex-col justify-between">
+                    <h3 class="text-xs font-medium text-gray-500 mb-1 uppercase">Acesso ao Pagamento</h3>
+                    <div id="kpi-checkout-hoje" class="text-3xl font-bold text-gray-900 mb-4">--</div>
+                    <div class="flex flex-col space-y-1 text-xs">
+                        <div class="flex justify-between border-b border-gray-50 pb-1">
+                            <span class="text-gray-500">vs Média 30d</span>
+                            <span id="kpi-checkout-30d" class="font-medium text-gray-400">--</span>
+                        </div>
+                        <div class="flex justify-between pt-1">
+                            <span class="text-gray-500">vs Média 90d</span>
+                            <span id="kpi-checkout-90d" class="font-medium text-gray-400">--</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- KPI 5 -->
+                <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100 flex flex-col justify-between">
+                    <h3 class="text-xs font-medium text-gray-500 mb-1 uppercase">Compras Concluídas</h3>
+                    <div id="kpi-compras-hoje" class="text-3xl font-bold text-gray-900 mb-4">--</div>
+                    <div class="flex flex-col space-y-1 text-xs">
+                        <div class="flex justify-between border-b border-gray-50 pb-1">
+                            <span class="text-gray-500">vs Média 30d</span>
+                            <span id="kpi-compras-30d" class="font-medium text-gray-400">--</span>
+                        </div>
+                        <div class="flex justify-between pt-1">
+                            <span class="text-gray-500">vs Média 90d</span>
+                            <span id="kpi-compras-90d" class="font-medium text-gray-400">--</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bloco 2: Taxas de Conversão -->
+        <section class="mb-10">
+            <h2 class="text-xl font-semibold mb-4 text-gray-700">Taxas de Conversão do Funil</h2>
+            <div class="bg-white p-8 rounded-lg shadow-sm border border-gray-100">
+                <div class="grid grid-cols-3 gap-8 divide-x divide-gray-200">
+                    <div class="px-4 flex flex-col items-center text-center">
+                        <h3 class="text-sm font-medium text-gray-500 mb-2 uppercase tracking-wide">Cadastro <br/><span class="text-xs text-gray-400 capitalize normal-case">(Início &rarr; Conclusão)</span></h3>
+                        <div id="conv-cadastro-hoje" class="text-5xl font-extrabold text-primary mb-6">--</div>
+                        
+                        <div class="w-full max-w-[180px] flex flex-col space-y-1 text-xs bg-gray-50 p-2 rounded">
+                            <div class="flex justify-between border-b border-gray-200 pb-1">
+                                <span class="text-gray-500">vs Média 30d</span>
+                                <span id="conv-cadastro-30d" class="font-medium text-gray-400">--</span>
+                            </div>
+                            <div class="flex justify-between pt-1">
+                                <span class="text-gray-500">vs Média 90d</span>
+                                <span id="conv-cadastro-90d" class="font-medium text-gray-400">--</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="px-4 flex flex-col items-center text-center">
+                        <h3 class="text-sm font-medium text-gray-500 mb-2 uppercase tracking-wide">Login <br/><span class="text-xs text-gray-400 capitalize normal-case">(Início &rarr; Conclusão)</span></h3>
+                        <div id="conv-login-hoje" class="text-5xl font-extrabold text-primary mb-6">--</div>
+                        
+                        <div class="w-full max-w-[180px] flex flex-col space-y-1 text-xs bg-gray-50 p-2 rounded">
+                            <div class="flex justify-between border-b border-gray-200 pb-1">
+                                <span class="text-gray-500">vs Média 30d</span>
+                                <span id="conv-login-30d" class="font-medium text-gray-400">--</span>
+                            </div>
+                            <div class="flex justify-between pt-1">
+                                <span class="text-gray-500">vs Média 90d</span>
+                                <span id="conv-login-90d" class="font-medium text-gray-400">--</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="px-4 flex flex-col items-center text-center">
+                        <h3 class="text-sm font-medium text-gray-500 mb-2 uppercase tracking-wide">Geral <br/><span class="text-xs text-gray-400 capitalize normal-case">(Carrinho &rarr; Compra)</span></h3>
+                        <div id="conv-geral-hoje" class="text-5xl font-extrabold text-primary mb-6">--</div>
+
+                        <div class="w-full max-w-[180px] flex flex-col space-y-1 text-xs bg-gray-50 p-2 rounded">
+                            <div class="flex justify-between border-b border-gray-200 pb-1">
+                                <span class="text-gray-500">vs Média 30d</span>
+                                <span id="conv-geral-30d" class="font-medium text-gray-400">--</span>
+                            </div>
+                            <div class="flex justify-between pt-1">
+                                <span class="text-gray-500">vs Média 90d</span>
+                                <span id="conv-geral-90d" class="font-medium text-gray-400">--</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bloco 3: Tabela de Origem do Login -->
+        <section class="mb-10">
+            <h2 class="text-xl font-semibold mb-4 text-gray-700">Origem do Login (Páginas)</h2>
+            <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th scope="col" class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/2">Tela (Título da Página)</th>
+                            <th scope="col" class="px-6 py-4 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Quantidade Absoluta</th>
+                            <th scope="col" class="px-6 py-4 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Taxa de Conversão (%)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="origins-tbody" class="bg-white divide-y divide-gray-200">
+                        <!-- Renderizado via JS -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        async function loadData() {
+            try {
+                // Adiciona um timestamp na URL para evitar cache de navegador forte
+                const response = await fetch('dashboard_data.json?t=' + new Date().getTime());
+                const data = await response.json();
+                
+                // Utilitário de formatação de números
+                const fmtNum = num => Number(num).toLocaleString('pt-BR');
+                
+                // Formatação de Porcentagem de Variação (+X% ou -X%)
+                const fmtPct = (val) => {
+                    const num = Number(val);
+                    if (isNaN(num)) return '<span class="text-gray-500">-</span>';
+                    const sign = num > 0 ? '+' : '';
+                    const arrow = num > 0 ? '&uarr;' : (num < 0 ? '&darr;' : '-');
+                    const colorClass = num > 0 ? 'text-green-600' : (num < 0 ? 'text-red-500' : 'text-gray-500');
+                    return `<span class="${colorClass} font-medium">${sign}${num.toFixed(1)}% ${arrow}</span>`;
+                };
+                
+                // Formatação de Pontos Percentuais (+X pp ou -X pp)
+                const fmtPp = (val) => {
+                    const num = Number(val);
+                    if (isNaN(num)) return '<span class="text-gray-500">-</span>';
+                    const sign = num > 0 ? '+' : '';
+                    const colorClass = num > 0 ? 'text-green-600' : (num < 0 ? 'text-red-500' : 'text-gray-500');
+                    return `<span class="${colorClass} font-medium">${sign}${num.toFixed(1)} pp</span>`;
+                };
+
+                // Atualizar bloco de KPIs (Valores Absolutos)
+                const updateKPI = (idPrefix, key) => {
+                    const hoje = data.kpis.today[key] || 0;
+                    const b30 = data.kpis.baseline30[key] || 0;
+                    const b90 = data.kpis.baseline90[key] || 0;
+                    
+                    document.getElementById(`${idPrefix}-hoje`).innerText = fmtNum(hoje);
+                    
+                    const pct30 = b30 > 0 ? ((hoje - b30) / b30) * 100 : 0;
+                    const pct90 = b90 > 0 ? ((hoje - b90) / b90) * 100 : 0;
+                    
+                    document.getElementById(`${idPrefix}-30d`).innerHTML = fmtPct(pct30);
+                    document.getElementById(`${idPrefix}-90d`).innerHTML = fmtPct(pct90);
+                };
+
+                updateKPI('kpi-buscas', 'buscas');
+                updateKPI('kpi-carrinho', 'carrinho');
+                updateKPI('kpi-resumo', 'resumo');
+                updateKPI('kpi-checkout', 'checkout');
+                updateKPI('kpi-compras', 'compras');
+
+                // Atualizar bloco de Funil (Taxas %)
+                const updateFunnel = (idPrefix, key) => {
+                    const hoje = Number(data.funnel.today[key]) || 0;
+                    const b30 = Number(data.funnel.baseline30[key]) || 0;
+                    const b90 = Number(data.funnel.baseline90[key]) || 0;
+                    
+                    document.getElementById(`${idPrefix}-hoje`).innerText = hoje.toFixed(1) + '%';
+                    
+                    const diff30 = hoje - b30;
+                    const diff90 = hoje - b90;
+                    
+                    document.getElementById(`${idPrefix}-30d`).innerHTML = fmtPp(diff30);
+                    document.getElementById(`${idPrefix}-90d`).innerHTML = fmtPp(diff90);
+                };
+
+                updateFunnel('conv-cadastro', 'cadastro');
+                updateFunnel('conv-login', 'login');
+                updateFunnel('conv-geral', 'geral');
+
+                // Atualizar Tabela de Origem
+                const tbody = document.getElementById('origins-tbody');
+                tbody.innerHTML = '';
+                data.origins.forEach(orig => {
+                    tbody.innerHTML += `
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${orig.tela}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-right">${fmtNum(orig.volume)}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-primary text-right font-bold">${orig.conversao.toFixed(1)}%</td>
+                        </tr>
+                    `;
+                });
+
+                // Atualiza timestamp na tela
+                const dt = new Date(data.updatedAt);
+                document.getElementById('last-update').innerText = 'Atualizado: ' + dt.toLocaleTimeString('pt-BR');
+
+            } catch (err) {
+                console.error("Erro ao carregar dados. Verifique se o dashboard_data.json existe.", err);
+                document.getElementById('last-update').innerText = 'Erro ao conectar aos dados';
+                document.getElementById('last-update').classList.add('text-red-500');
+            }
+        }
+        
+        // Carga inicial
+        loadData();
+        
+        // Auto-refresh do dashboard a cada 2 minutos caso deixem a tela aberta
+        setInterval(loadData, 120000);
+    </script>
+</body>
+</html>
