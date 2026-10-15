@@ -44,14 +44,50 @@ async function fetchMixpanel(endpoint, retries = 3) {
 }
 
 // Configuração de Hoje (a partir de 15/10)
-const todayStr = new Date().toISOString().split('T')[0];
-const currentTo = todayStr < '2026-10-15' ? '2026-10-15' : todayStr;
-const fetchStart = '2026-10-15';
-const fetchEnd = currentTo;
+const todayObj = new Date();
+const todayStr = todayObj.toISOString().split("T")[0];
+const yesterdayObj = new Date(todayObj.getTime() - 86400000);
+const yesterdayStr = yesterdayObj.toISOString().split("T")[0];
 
-// Função genérica para pegar uma métrica de "Hoje"
-async function fetchMetricToday(event, property = 'time') {
-    const url = `/api/2.0/events/properties?project_id=${projectId}&event=${event}&name=${property}&type=general&unit=day&from_date=${fetchStart}&to_date=${fetchEnd}`;
+const fetchStart = "2026-10-15";
+const fetchEndToday = todayStr < fetchStart ? fetchStart : todayStr;
+
+let kpiEnd = yesterdayStr < fetchStart ? fetchStart : yesterdayStr;
+let kpiDays = 1;
+if (kpiEnd >= fetchStart) {
+    const startMs = new Date(fetchStart + "T00:00:00Z").getTime();
+    const endMs = new Date(kpiEnd + "T00:00:00Z").getTime();
+    kpiDays = Math.floor((endMs - startMs) / (1000 * 60 * 60 * 24)) + 1;
+}
+if(kpiDays < 1) kpiDays = 1;
+
+async function fetchKpiMetric(event, property = "time") {
+    const url = "/api/2.0/events/properties?project_id="+projectId+"&event="+event+"&name="+property+"&type=general&unit=day&from_date="+fetchStart+"&to_date="+kpiEnd;
+    const result = await fetchMixpanel(url);
+    let total = 0;
+    if (!result || !result.data || !result.data.values) return 0;
+    for (const [propName, datesObj] of Object.entries(result.data.values)) {
+        for (const [dateStr, value] of Object.entries(datesObj)) {
+            total += value;
+        }
+    }
+    return Math.round(total / kpiDays);
+}
+
+async function fetchKpiPageViewResumo() {
+    const url = "/api/2.0/events/properties?project_id="+projectId+"&event=page_view&name=page_title&type=general&unit=day&from_date="+fetchStart+"&to_date="+kpiEnd;
+    const result = await fetchMixpanel(url);
+    let total = 0;
+    if (!result || !result.data || !result.data.values || !result.data.values["Resumo - Aqui ads"]) return 0;
+    for (const [dateStr, value] of Object.entries(result.data.values["Resumo - Aqui ads"])) {
+        total += value;
+    }
+    return Math.round(total / kpiDays);
+}
+
+// Funcao para pegar uma metrica no D0 (Funil em Tempo Real)
+async function fetchMetricToday(event, property = "time") {
+    const url = "/api/2.0/events/properties?project_id="+projectId+"&event="+event+"&name="+property+"&type=general&unit=day&from_date="+fetchStart+"&to_date="+fetchEndToday;
     const result = await fetchMixpanel(url);
     
     let totalToday = 0;
@@ -135,19 +171,19 @@ async function extractAllData() {
     };
 
     console.log("Buscando Buscas Hoje...");
-    data.kpis.today.buscas = await fetchMetricToday('inventory_address_search_executed');
+    data.kpis.today.buscas = await fetchKpiMetric('inventory_address_search_executed');
     
     console.log("Buscando Carrinho Hoje...");
-    data.kpis.today.carrinho = await fetchMetricToday('inventory_item_added');
+    data.kpis.today.carrinho = await fetchKpiMetric('inventory_item_added');
     
     console.log("Buscando Resumo Hoje...");
-    data.kpis.today.resumo = await fetchPageViewResumoToday();
+    data.kpis.today.resumo = await fetchKpiPageViewResumo();
     
     console.log("Buscando Checkout Hoje...");
-    data.kpis.today.checkout = await fetchMetricToday('begin_checkout');
+    data.kpis.today.checkout = await fetchKpiMetric('begin_checkout');
     
     console.log("Buscando Compras Hoje...");
-    data.kpis.today.compras = await fetchMetricToday('payment_approved');
+    data.kpis.today.compras = await fetchKpiMetric('payment_approved');
     
     console.log("Buscando Funis Hoje...");
     const loginStarted = await fetchMetricToday('main_login_started');
