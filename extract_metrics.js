@@ -38,76 +38,49 @@ async function fetchMixpanel(endpoint, retries = 3) {
         } catch (e) {
             console.error(`Erro na requisição (tentativa ${i+1}): ${e.message}`);
             if (i === retries - 1) return null;
-            // Esperar 2s antes de tentar de novo
             await new Promise(r => setTimeout(r, 2000));
         }
     }
 }
 
-// Configuração das Janelas de Tempo
+// Configuração de Hoje (a partir de 15/10)
 const todayStr = new Date().toISOString().split('T')[0];
-// Se hoje for antes do dia 15, travamos a consulta no dia 15 para retornar zerado e não sujar com tráfego pré-deploy.
 const currentTo = todayStr < '2026-10-15' ? '2026-10-15' : todayStr;
-
-const dateRanges = {
-    today: { from: '2026-10-15', to: currentTo, days: 1 },
-    baseline30: { from: '2026-09-14', to: '2026-10-13', days: 30 },
-    baseline90: { from: '2026-07-15', to: '2026-10-13', days: 90 }
-};
-
-// Pega todos os dados da janela mais ampla (90 dias até hoje) para otimizar requisições
-const fetchStart = '2026-07-15';
+const fetchStart = '2026-10-15';
 const fetchEnd = currentTo;
 
-function isDateInRange(dateStr, rangeStr) {
-    return dateStr >= dateRanges[rangeStr].from && dateStr <= dateRanges[rangeStr].to;
-}
-
-// Função genérica para pegar uma métrica de um único request em lote
-async function fetchMetricBatch(event, property = 'time') {
+// Função genérica para pegar uma métrica de "Hoje"
+async function fetchMetricToday(event, property = 'time') {
     const url = `/api/2.0/events/properties?project_id=${projectId}&event=${event}&name=${property}&type=general&unit=day&from_date=${fetchStart}&to_date=${fetchEnd}`;
     const result = await fetchMixpanel(url);
     
-    const aggregated = { today: 0, baseline30: 0, baseline90: 0 };
-    
-    if (!result || !result.data || !result.data.values) return aggregated;
+    let totalToday = 0;
+    if (!result || !result.data || !result.data.values) return totalToday;
     
     for (const [propName, datesObj] of Object.entries(result.data.values)) {
         for (const [dateStr, value] of Object.entries(datesObj)) {
-            if (isDateInRange(dateStr, 'today')) aggregated.today += value;
-            if (isDateInRange(dateStr, 'baseline30')) aggregated.baseline30 += value;
-            if (isDateInRange(dateStr, 'baseline90')) aggregated.baseline90 += value;
+            totalToday += value;
         }
     }
-    
-    // Normalizar baselines para média diária
-    aggregated.baseline30 = Math.round(aggregated.baseline30 / 30);
-    aggregated.baseline90 = Math.round(aggregated.baseline90 / 90);
-    
-    return aggregated;
+    return totalToday;
 }
 
-async function fetchPageViewResumoBatch() {
+// Volume de page_view do resumo "Hoje"
+async function fetchPageViewResumoToday() {
     const url = `/api/2.0/events/properties?project_id=${projectId}&event=page_view&name=page_path&type=general&unit=day&from_date=${fetchStart}&to_date=${fetchEnd}`;
     const result = await fetchMixpanel(url);
     
-    const aggregated = { today: 0, baseline30: 0, baseline90: 0 };
-    if (!result || !result.data || !result.data.values || !result.data.values['/resumo']) return aggregated;
+    let totalToday = 0;
+    if (!result || !result.data || !result.data.values || !result.data.values['/resumo']) return totalToday;
     
     for (const [dateStr, value] of Object.entries(result.data.values['/resumo'])) {
-        if (isDateInRange(dateStr, 'today')) aggregated.today += value;
-        if (isDateInRange(dateStr, 'baseline30')) aggregated.baseline30 += value;
-        if (isDateInRange(dateStr, 'baseline90')) aggregated.baseline90 += value;
+        totalToday += value;
     }
-    
-    aggregated.baseline30 = Math.round(aggregated.baseline30 / 30);
-    aggregated.baseline90 = Math.round(aggregated.baseline90 / 90);
-    
-    return aggregated;
+    return totalToday;
 }
 
-// Pegar origens do login (usando page_title em main_login_started)
-async function fetchLoginOrigins() {
+// Pegar origens do login "Hoje" (apenas a partir do dia 15)
+async function fetchLoginOriginsToday() {
     const url = `/api/2.0/events/properties?project_id=${projectId}&event=main_login_started&name=page_title&type=general&unit=day&from_date=${fetchStart}&to_date=${fetchEnd}`;
     const result = await fetchMixpanel(url);
     
@@ -118,14 +91,9 @@ async function fetchLoginOrigins() {
         for (const [pageTitle, datesObj] of Object.entries(result.data.values)) {
             let volumeForPeriod = 0;
             for (const [dateStr, value] of Object.entries(datesObj)) {
-                // Origem exibida baseada no baseline de 30 dias para ter volume representativo (ou usar 'today' quando tiver tração)
-                // Vamos somar os ultimos 30 dias para o share:
-                if (dateStr >= '2026-09-15' && dateStr <= currentTo) {
-                    volumeForPeriod += value;
-                }
+                volumeForPeriod += value;
             }
             if (volumeForPeriod > 0) {
-                // Limpar título se vier estranho (ex: undefined, null, vazios)
                 const safeTitle = (pageTitle && pageTitle !== 'undefined' && pageTitle !== 'null' && pageTitle.trim() !== '') 
                     ? pageTitle 
                     : 'Acesso Direto / Sem Título';
@@ -140,60 +108,61 @@ async function fetchLoginOrigins() {
         .map(([tela, volume]) => ({
             tela,
             volume,
-            conversao: totalVolume > 0 ? (volume / totalVolume) * 100 : 0
+            conversao: totalVolume > 0 ? ((volume / totalVolume) * 100).toFixed(1) : 0
         }))
         .sort((a,b) => b.volume - a.volume)
-        .slice(0, 10); // top 10 origens
+        .slice(0, 10);
         
     return sortedOrigins;
 }
 
 async function extractAllData() {
-    console.log("Iniciando extração otimizada de dados do Mixpanel (Lote)...");
+    console.log("Iniciando extração otimizada: APENAS HOJE. Baselines estão fixados.");
 
     const data = {
         updatedAt: new Date().toISOString(),
-        kpis: { today: {}, baseline30: {}, baseline90: {} },
-        funnel: { today: {}, baseline30: {}, baseline90: {} },
+        kpis: {
+            today: {},
+            baseline30: { buscas: 889, carrinho: 425, resumo: 329, checkout: 43, compras: 16 },
+            baseline90: { buscas: 884, carrinho: 391, resumo: 295, checkout: 49, compras: 12 }
+        },
+        funnel: {
+            today: {},
+            baseline30: { cadastro: 30.6, login: 15.6, geral: 3.8 },
+            baseline90: { cadastro: 43.9, login: 8.5, geral: 3.1 }
+        },
         origins: []
     };
 
-    // Fazer as chamadas (Apenas 9 requisições no total para a API, reduz drasticamente o rate limit)
-    console.log("Buscando Buscas...");
-    const buscas = await fetchMetricBatch('inventory_address_search_executed');
-    console.log("Buscando Carrinho...");
-    const carrinho = await fetchMetricBatch('inventory_item_added');
-    console.log("Buscando Resumo...");
-    const resumo = await fetchPageViewResumoBatch();
-    console.log("Buscando Checkout...");
-    const checkout = await fetchMetricBatch('begin_checkout');
-    console.log("Buscando Compras...");
-    const compras = await fetchMetricBatch('payment_approved');
+    console.log("Buscando Buscas Hoje...");
+    data.kpis.today.buscas = await fetchMetricToday('inventory_address_search_executed');
     
-    console.log("Buscando Funis de Login e Cadastro...");
-    const loginStarted = await fetchMetricBatch('main_login_started');
-    const loginCompleted = await fetchMetricBatch('main_login_completed');
-    const signupStarted = await fetchMetricBatch('main_signup_started');
-    const signupCompleted = await fetchMetricBatch('main_signup_completed');
+    console.log("Buscando Carrinho Hoje...");
+    data.kpis.today.carrinho = await fetchMetricToday('inventory_item_added');
+    
+    console.log("Buscando Resumo Hoje...");
+    data.kpis.today.resumo = await fetchPageViewResumoToday();
+    
+    console.log("Buscando Checkout Hoje...");
+    data.kpis.today.checkout = await fetchMetricToday('begin_checkout');
+    
+    console.log("Buscando Compras Hoje...");
+    data.kpis.today.compras = await fetchMetricToday('payment_approved');
+    
+    console.log("Buscando Funis Hoje...");
+    const loginStarted = await fetchMetricToday('main_login_started');
+    const loginCompleted = await fetchMetricToday('main_login_completed');
+    const signupStarted = await fetchMetricToday('main_signup_started');
+    const signupCompleted = await fetchMetricToday('main_signup_completed');
 
-    for (const period of ['today', 'baseline30', 'baseline90']) {
-        data.kpis[period] = {
-            buscas: buscas[period],
-            carrinho: carrinho[period],
-            resumo: resumo[period],
-            checkout: checkout[period],
-            compras: compras[period]
-        };
-        
-        data.funnel[period] = {
-            cadastro: signupStarted[period] > 0 ? ((signupCompleted[period] / signupStarted[period]) * 100).toFixed(1) : 0,
-            login: loginStarted[period] > 0 ? ((loginCompleted[period] / loginStarted[period]) * 100).toFixed(1) : 0,
-            geral: carrinho[period] > 0 ? ((compras[period] / carrinho[period]) * 100).toFixed(1) : 0
-        };
-    }
+    data.funnel.today = {
+        cadastro: signupStarted > 0 ? ((signupCompleted / signupStarted) * 100).toFixed(1) : 0,
+        login: loginStarted > 0 ? ((loginCompleted / loginStarted) * 100).toFixed(1) : 0,
+        geral: data.kpis.today.carrinho > 0 ? ((data.kpis.today.compras / data.kpis.today.carrinho) * 100).toFixed(1) : 0
+    };
 
-    console.log("Buscando Origens...");
-    data.origins = await fetchLoginOrigins();
+    console.log("Buscando Origens Hoje...");
+    data.origins = await fetchLoginOriginsToday();
 
     const outputPath = path.join(__dirname, 'dashboard_data.json');
     fs.writeFileSync(outputPath, JSON.stringify(data, null, 2));
