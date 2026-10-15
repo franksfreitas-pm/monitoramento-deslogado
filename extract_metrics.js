@@ -67,13 +67,13 @@ async function fetchMetricToday(event, property = 'time') {
 
 // Volume de page_view do resumo "Hoje"
 async function fetchPageViewResumoToday() {
-    const url = `/api/2.0/events/properties?project_id=${projectId}&event=page_view&name=page_path&type=general&unit=day&from_date=${fetchStart}&to_date=${fetchEnd}`;
+    const url = `/api/2.0/events/properties?project_id=${projectId}&event=page_view&name=page_title&type=general&unit=day&from_date=${fetchStart}&to_date=${fetchEnd}`;
     const result = await fetchMixpanel(url);
     
     let totalToday = 0;
-    if (!result || !result.data || !result.data.values || !result.data.values['/resumo']) return totalToday;
+    if (!result || !result.data || !result.data.values || !result.data.values['Resumo - Aqui ads']) return totalToday;
     
-    for (const [dateStr, value] of Object.entries(result.data.values['/resumo'])) {
+    for (const [dateStr, value] of Object.entries(result.data.values['Resumo - Aqui ads'])) {
         totalToday += value;
     }
     return totalToday;
