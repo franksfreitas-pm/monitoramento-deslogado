@@ -1,23 +1,23 @@
 {
-  "updatedAt": "2026-10-15T17:32:02.169Z",
+  "updatedAt": "2026-10-15T17:53:02.927Z",
   "kpis": {
     "today": {
-      "buscas": 485,
-      "carrinho": 176,
-      "resumo": 199,
-      "checkout": 38,
-      "compras": 9
+      "buscas": 544,
+      "carrinho": 196,
+      "resumo": 0,
+      "checkout": 0,
+      "compras": 0
     },
     "baseline30": {
-      "buscas": 0,
-      "carrinho": 0,
+      "buscas": 889,
+      "carrinho": 425,
       "resumo": 0,
       "checkout": 0,
       "compras": 0
     },
     "baseline90": {
-      "buscas": 0,
-      "carrinho": 0,
+      "buscas": 884,
+      "carrinho": 391,
       "resumo": 0,
       "checkout": 0,
       "compras": 0
@@ -27,39 +27,18 @@
     "today": {
       "cadastro": 0,
       "login": 0,
-      "geral": "5.1"
+      "geral": "0.0"
     },
     "baseline30": {
       "cadastro": 0,
       "login": 0,
-      "geral": 0
+      "geral": "0.0"
     },
     "baseline90": {
       "cadastro": 0,
       "login": 0,
-      "geral": 0
+      "geral": "0.0"
     }
   },
-  "origins": [
-    {
-      "tela": "Home Page",
-      "volume": 1520,
-      "conversao": 72.1
-    },
-    {
-      "tela": "Detalhes do Produto",
-      "volume": 985,
-      "conversao": 65.4
-    },
-    {
-      "tela": "Carrinho de Compras",
-      "volume": 610,
-      "conversao": 81.2
-    },
-    {
-      "tela": "Página de Favoritos",
-      "volume": 300,
-      "conversao": 58.9
-    }
-  ]
+  "origins": []
 }
