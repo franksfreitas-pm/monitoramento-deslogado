@@ -37,7 +37,7 @@ async function fetchMixpanel(endpoint, retries = 3) {
             return data;
         } catch (e) {
             console.error(`Erro na requisição (tentativa ${i+1}): ${e.message}`);
-            if (i === retries - 1) return null;
+            if (i === retries - 1) throw e;
             await new Promise(r => setTimeout(r, 2000));
         }
     }
