@@ -2,7 +2,9 @@ name: Update Dashboard Data
 
 on:
   schedule:
-    - cron: '0 * * * *' # Executa de hora em hora
+    # Executa a cada 15 minutos, mas em minutos "quebrados" (7, 22, 37, 52)
+    # Isso evita o minuto "0" (ex: 11h00), que é quando os servidores do GitHub mais travam
+    - cron: '7,22,37,52 * * * *'
   workflow_dispatch: # Permite execução manual pelo painel do GitHub
 
 jobs:
