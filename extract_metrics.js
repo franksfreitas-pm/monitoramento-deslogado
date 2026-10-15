@@ -150,7 +150,7 @@ async function extractAllData() {
     data.kpis.today.compras = await fetchMetricToday('payment_approved');
     
     console.log("Buscando Funis Hoje...");
-    const loginStarted = await fetchMetricToday('main_login_verified');
+    const loginStarted = await fetchMetricToday('main_login_started');
     const loginCompleted = await fetchMetricToday('login');
     const signupStarted = await fetchMetricToday('main_signup_started');
     const signupCompleted = await fetchMetricToday('main_signup_completed');
