@@ -81,7 +81,7 @@ async function fetchPageViewResumoToday() {
 
 // Pegar origens do login "Hoje" (apenas a partir do dia 15)
 async function fetchLoginOriginsToday() {
-    const url = `/api/2.0/events/properties?project_id=${projectId}&event=main_login_started&name=page_title&type=unique&unit=day&from_date=${fetchStart}&to_date=${fetchEnd}`;
+    const url = `/api/2.0/events/properties?project_id=${projectId}&event=main_login_verified&name=page_title&type=unique&unit=day&from_date=${fetchStart}&to_date=${fetchEnd}`;
     const result = await fetchMixpanel(url);
     
     const originsMap = {};
@@ -150,8 +150,8 @@ async function extractAllData() {
     data.kpis.today.compras = await fetchMetricToday('payment_approved');
     
     console.log("Buscando Funis Hoje...");
-    const loginStarted = await fetchMetricToday('main_login_started');
-    const loginCompleted = await fetchMetricToday('main_login_completed');
+    const loginStarted = await fetchMetricToday('main_login_verified');
+    const loginCompleted = await fetchMetricToday('login');
     const signupStarted = await fetchMetricToday('main_signup_started');
     const signupCompleted = await fetchMetricToday('main_signup_completed');
 
