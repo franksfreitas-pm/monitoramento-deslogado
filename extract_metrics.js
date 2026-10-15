@@ -51,7 +51,7 @@ const fetchEnd = currentTo;
 
 // Função genérica para pegar uma métrica de "Hoje"
 async function fetchMetricToday(event, property = 'time') {
-    const url = `/api/2.0/events/properties?project_id=${projectId}&event=${event}&name=${property}&type=general&unit=day&from_date=${fetchStart}&to_date=${fetchEnd}`;
+    const url = `/api/2.0/events/properties?project_id=${projectId}&event=${event}&name=${property}&type=unique&unit=day&from_date=${fetchStart}&to_date=${fetchEnd}`;
     const result = await fetchMixpanel(url);
     
     let totalToday = 0;
@@ -67,7 +67,7 @@ async function fetchMetricToday(event, property = 'time') {
 
 // Volume de page_view do resumo "Hoje"
 async function fetchPageViewResumoToday() {
-    const url = `/api/2.0/events/properties?project_id=${projectId}&event=page_view&name=page_title&type=general&unit=day&from_date=${fetchStart}&to_date=${fetchEnd}`;
+    const url = `/api/2.0/events/properties?project_id=${projectId}&event=page_view&name=page_title&type=unique&unit=day&from_date=${fetchStart}&to_date=${fetchEnd}`;
     const result = await fetchMixpanel(url);
     
     let totalToday = 0;
@@ -81,7 +81,7 @@ async function fetchPageViewResumoToday() {
 
 // Pegar origens do login "Hoje" (apenas a partir do dia 15)
 async function fetchLoginOriginsToday() {
-    const url = `/api/2.0/events/properties?project_id=${projectId}&event=main_login_started&name=page_title&type=general&unit=day&from_date=${fetchStart}&to_date=${fetchEnd}`;
+    const url = `/api/2.0/events/properties?project_id=${projectId}&event=main_login_started&name=page_title&type=unique&unit=day&from_date=${fetchStart}&to_date=${fetchEnd}`;
     const result = await fetchMixpanel(url);
     
     const originsMap = {};

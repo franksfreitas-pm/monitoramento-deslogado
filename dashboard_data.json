@@ -1,12 +1,12 @@
 {
-  "updatedAt": "2026-10-15T18:03:57.958Z",
+  "updatedAt": "2026-10-15T18:35:00.000Z",
   "kpis": {
     "today": {
-      "buscas": 554,
-      "carrinho": 200,
-      "resumo": 219,
-      "checkout": 0,
-      "compras": 0
+      "buscas": 102,
+      "carrinho": 61,
+      "resumo": 60,
+      "checkout": 64,
+      "compras": 9
     },
     "baseline30": {
       "buscas": 889,
@@ -25,20 +25,26 @@
   },
   "funnel": {
     "today": {
-      "cadastro": 0,
-      "login": 0,
-      "geral": "0.0"
+      "cadastro": "42.8",
+      "login": "38.0",
+      "geral": "14.8"
     },
     "baseline30": {
-      "cadastro": 30.6,
-      "login": 15.6,
-      "geral": 3.8
+      "cadastro": "30.6",
+      "login": "15.6",
+      "geral": "3.8"
     },
     "baseline90": {
-      "cadastro": 43.9,
-      "login": 8.5,
-      "geral": 3.1
+      "cadastro": "43.9",
+      "login": "8.5",
+      "geral": "3.1"
     }
   },
-  "origins": []
+  "origins": [
+    {
+      "tela": "Acesso Direto / Sem Título",
+      "volume": 0,
+      "conversao": 0
+    }
+  ]
 }
