@@ -1,43 +1,43 @@
 {
-  "updatedAt": "2026-10-15T17:56:53.087Z",
+  "updatedAt": "2026-10-15T18:03:57.958Z",
   "kpis": {
     "today": {
-      "buscas": 0,
-      "carrinho": 0,
-      "resumo": 0,
+      "buscas": 554,
+      "carrinho": 200,
+      "resumo": 219,
       "checkout": 0,
       "compras": 0
     },
     "baseline30": {
-      "buscas": 0,
-      "carrinho": 0,
-      "resumo": 0,
-      "checkout": 0,
-      "compras": 0
+      "buscas": 889,
+      "carrinho": 425,
+      "resumo": 329,
+      "checkout": 43,
+      "compras": 16
     },
     "baseline90": {
-      "buscas": 0,
-      "carrinho": 0,
-      "resumo": 0,
-      "checkout": 0,
-      "compras": 0
+      "buscas": 884,
+      "carrinho": 391,
+      "resumo": 295,
+      "checkout": 49,
+      "compras": 12
     }
   },
   "funnel": {
     "today": {
       "cadastro": 0,
       "login": 0,
-      "geral": 0
+      "geral": "0.0"
     },
     "baseline30": {
-      "cadastro": 0,
-      "login": 0,
-      "geral": 0
+      "cadastro": 30.6,
+      "login": 15.6,
+      "geral": 3.8
     },
     "baseline90": {
-      "cadastro": 0,
-      "login": 0,
-      "geral": 0
+      "cadastro": 43.9,
+      "login": 8.5,
+      "geral": 3.1
     }
   },
   "origins": []
