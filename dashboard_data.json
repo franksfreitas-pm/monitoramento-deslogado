@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-17T05:29:28.780Z",
+  "updatedAt": "2026-10-17T10:31:39.357Z",
   "kpis": {
     "today": {
       "buscas": 806,
@@ -25,8 +25,8 @@
   },
   "funnel": {
     "today": {
-      "cadastro": "27.3",
-      "login": "20.1",
+      "cadastro": "26.7",
+      "login": "19.5",
       "geral": "3.5"
     },
     "baseline30": {
@@ -43,36 +43,36 @@
   "origins": [
     {
       "tela": "Aqui ads",
-      "volume": 71,
-      "conversao": "65.7"
+      "volume": 72,
+      "conversao": "65.5"
     },
     {
       "tela": "Resumo - Aqui ads",
       "volume": 16,
-      "conversao": "14.8"
+      "conversao": "14.5"
     },
     {
       "tela": "Resultados - Aqui ads",
-      "volume": 12,
-      "conversao": "11.1"
+      "volume": 13,
+      "conversao": "11.8"
     },
     {
       "tela": "Assistente de anúncios - Aqui ads",
       "volume": 5,
-      "conversao": "4.6"
+      "conversao": "4.5"
     },
     {
       "tela": "MSD Saúde Animal - Aqui ads",
       "volume": 2,
-      "conversao": "1.9"
+      "conversao": "1.8"
     },
     {
-      "tela": "Shopping Mueller - Aqui ads",
+      "tela": "Sua campanha está no ar! - Aqui ads",
       "volume": 1,
       "conversao": "0.9"
     },
     {
-      "tela": "Sua campanha está no ar! - Aqui ads",
+      "tela": "Shopping Mueller - Aqui ads",
       "volume": 1,
       "conversao": "0.9"
     }
