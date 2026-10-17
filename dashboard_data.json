@@ -1,11 +1,11 @@
 {
-  "updatedAt": "2026-10-16T21:59:10.385Z",
+  "updatedAt": "2026-10-17T00:17:44.839Z",
   "kpis": {
     "today": {
-      "buscas": 955,
-      "carrinho": 476,
-      "resumo": 428,
-      "checkout": 83,
+      "buscas": 781,
+      "carrinho": 485,
+      "resumo": 409,
+      "checkout": 99,
       "compras": 17
     },
     "baseline30": {
@@ -26,8 +26,8 @@
   "funnel": {
     "today": {
       "cadastro": "26.7",
-      "login": "20.3",
-      "geral": "3.6"
+      "login": "20.1",
+      "geral": "3.5"
     },
     "baseline30": {
       "cadastro": 30.6,
@@ -44,17 +44,17 @@
     {
       "tela": "Aqui ads",
       "volume": 70,
-      "conversao": "66.0"
+      "conversao": "65.4"
     },
     {
       "tela": "Resumo - Aqui ads",
       "volume": 16,
-      "conversao": "15.1"
+      "conversao": "15.0"
     },
     {
       "tela": "Resultados - Aqui ads",
-      "volume": 11,
-      "conversao": "10.4"
+      "volume": 12,
+      "conversao": "11.2"
     },
     {
       "tela": "Assistente de anúncios - Aqui ads",
