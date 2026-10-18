@@ -1,12 +1,12 @@
 {
-  "updatedAt": "2026-10-17T23:00:20.381Z",
+  "updatedAt": "2026-10-18T00:50:39.669Z",
   "kpis": {
     "today": {
-      "buscas": 806,
-      "carrinho": 486,
-      "resumo": 413,
-      "checkout": 100,
-      "compras": 17
+      "buscas": 619,
+      "carrinho": 351,
+      "resumo": 317,
+      "checkout": 72,
+      "compras": 12
     },
     "baseline30": {
       "buscas": 889,
@@ -25,9 +25,9 @@
   },
   "funnel": {
     "today": {
-      "cadastro": "24.3",
-      "login": "19.0",
-      "geral": "3.5"
+      "cadastro": "25.0",
+      "login": "18.9",
+      "geral": "3.4"
     },
     "baseline30": {
       "cadastro": 30.6,
@@ -67,12 +67,12 @@
       "conversao": "1.7"
     },
     {
-      "tela": "Shopping Mueller - Aqui ads",
+      "tela": "Sua campanha está no ar! - Aqui ads",
       "volume": 1,
       "conversao": "0.8"
     },
     {
-      "tela": "Sua campanha está no ar! - Aqui ads",
+      "tela": "Shopping Mueller - Aqui ads",
       "volume": 1,
       "conversao": "0.8"
     }
