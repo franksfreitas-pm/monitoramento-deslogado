@@ -38,7 +38,10 @@
     <!-- Topbar -->
     <header class="bg-white border-b border-gray-200 py-4 px-8 shadow-sm flex items-center justify-between">
         <h1 class="text-2xl font-bold text-gray-800"><span class="text-primary">Aqui Ads</span> | Dashboard do Fluxo Deslogado</h1>
-        <div id="last-update" class="text-sm text-gray-500">Carregando dados...</div>
+        <div class="flex items-center space-x-4">
+            <span id="last-update" class="text-sm text-gray-500">Carregando dados...</span>
+            <button id="btn-refresh" onclick="loadData(true)" class="text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded px-3 py-1.5 hover:text-primary hover:border-primary transition-colors">Atualizar dados</button>
+        </div>
     </header>
 
     <!-- Main Content -->
@@ -215,11 +218,45 @@
     </main>
 
     <script>
-        async function loadData() {
+        async function loadData(isManual = false) {
             try {
-                // Adiciona um timestamp na URL para evitar cache de navegador forte
-                const response = await fetch('dashboard_data.json?t=' + new Date().getTime());
-                const data = await response.json();
+                if (isManual) {
+                    const el = document.getElementById('last-update');
+                    el.innerText = 'Sincronizando dados...';
+                    el.classList.remove('text-red-500');
+                }
+                
+                const t = Date.now();
+                const req1 = fetch('dashboard_data.json?t=' + t, { cache: 'no-store' });
+                const req2 = fetch('https://api.github.com/repos/franksfreitas-pm/monitoramento-deslogado/contents/dashboard_data.json?ref=main&t=' + t, { 
+                    headers: { 'Accept': 'application/vnd.github.v3.raw' }, 
+                    cache: 'no-store' 
+                });
+
+                const results = await Promise.allSettled([req1, req2]);
+                
+                let data = null;
+                let latestTime = 0;
+
+                for (const result of results) {
+                    if (result.status === 'fulfilled' && result.value.ok) {
+                        try {
+                            const clone = result.value.clone();
+                            const json = await clone.json();
+                            const updatedAt = new Date(json.updatedAt).getTime();
+                            if (updatedAt > latestTime) {
+                                latestTime = updatedAt;
+                                data = json;
+                            }
+                        } catch (e) {
+                            console.warn("Erro ao parsear JSON de uma das fontes", e);
+                        }
+                    }
+                }
+
+                if (!data) {
+                    throw new Error("Não foi possível carregar os dados de nenhuma fonte");
+                }
                 
                 // Utilitário de formatação de números
                 const fmtNum = num => Number(num).toLocaleString('pt-BR');
@@ -318,7 +355,12 @@
 
                 // Atualiza timestamp na tela
                 const dt = new Date(data.updatedAt);
-                document.getElementById('last-update').innerText = 'Atualizado: ' + dt.toLocaleTimeString('pt-BR');
+                const dia = String(dt.getDate()).padStart(2, '0');
+                const mes = String(dt.getMonth() + 1).padStart(2, '0');
+                const horas = String(dt.getHours()).padStart(2, '0');
+                const min = String(dt.getMinutes()).padStart(2, '0');
+                const seg = String(dt.getSeconds()).padStart(2, '0');
+                document.getElementById('last-update').innerText = `Atualizado: ${dia}/${mes} às ${horas}:${min}:${seg}`;
 
             } catch (err) {
                 console.error("Erro ao carregar dados. Verifique se o dashboard_data.json existe.", err);
@@ -330,8 +372,8 @@
         // Carga inicial
         loadData();
         
-        // Auto-refresh do dashboard a cada 2 minutos caso deixem a tela aberta
-        setInterval(loadData, 120000);
+        // Auto-refresh do dashboard a cada 1 minuto caso deixem a tela aberta
+        setInterval(() => loadData(), 60000);
     </script>
 </body>
 </html>

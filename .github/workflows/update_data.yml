@@ -2,10 +2,13 @@ name: Update Dashboard Data
 
 on:
   schedule:
-    # Executa a cada 15 minutos, mas em minutos "quebrados" (7, 22, 37, 52)
-    # Isso evita o minuto "0" (ex: 11h00), que é quando os servidores do GitHub mais travam
+    # 4 janelas independentes por hora para contornar descartes da fila do GitHub Actions.
+    # O extract_metrics.js possui trava interna de 50 min para só consultar o Mixpanel 1x por hora.
     - cron: '7 * * * *'
-  workflow_dispatch: # Permite execução manual pelo painel do GitHub
+    - cron: '22 * * * *'
+    - cron: '37 * * * *'
+    - cron: '52 * * * *'
+  workflow_dispatch: # Permite execução manual imediata ignorando a trava de 50 min
 
 permissions:
   contents: write
@@ -26,12 +29,22 @@ jobs:
           node-version: '20'
 
       - name: Run extraction script
-        run: node extract_metrics.js
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            node extract_metrics.js --force
+          else
+            node extract_metrics.js
+          fi
 
       - name: Commit and push changes
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add dashboard_data.json
-          git commit -m "chore: auto-update mixpanel data" || echo "No changes to commit"
-          git push
+          if ! git diff --cached --quiet; then
+            git commit -m "chore: auto-update mixpanel data"
+            git pull --rebase origin main
+            git push
+          else
+            echo "Sem alterações no dashboard_data.json (trava de 50 min ativa)."
+          fi

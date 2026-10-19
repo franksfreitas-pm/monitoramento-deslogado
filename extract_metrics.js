@@ -44,9 +44,10 @@ async function fetchMixpanel(endpoint, retries = 3) {
 }
 
 // Configuração de Hoje (a partir de 15/10)
-const todayObj = new Date();
+const brtNowMs = Date.now() - (3 * 60 * 60 * 1000);
+const todayObj = new Date(brtNowMs);
 const todayStr = todayObj.toISOString().split("T")[0];
-const yesterdayObj = new Date(todayObj.getTime() - 86400000);
+const yesterdayObj = new Date(brtNowMs - 86400000);
 const yesterdayStr = yesterdayObj.toISOString().split("T")[0];
 
 const fetchStart = "2026-10-15";
@@ -153,6 +154,23 @@ async function fetchLoginOriginsToday() {
 }
 
 async function extractAllData() {
+    const existingPath = path.join(__dirname, 'dashboard_data.json');
+    const isForced = process.argv.includes('--force');
+    if (!isForced && fs.existsSync(existingPath)) {
+        try {
+            const existing = JSON.parse(fs.readFileSync(existingPath, 'utf8'));
+            if (existing && existing.updatedAt) {
+                const diffMinutes = (Date.now() - new Date(existing.updatedAt).getTime()) / 60000;
+                if (diffMinutes < 50) {
+                    console.log(`Última atualização ocorreu há ${diffMinutes.toFixed(1)} min (< 50 min). Ignorando execução para poupar cota do Mixpanel.`);
+                    return;
+                }
+            }
+        } catch (err) {
+            console.warn("Aviso ao ler dashboard_data.json existente:", err.message);
+        }
+    }
+
     console.log("Iniciando extração otimizada: APENAS HOJE. Baselines estão fixados.");
 
     const data = {
