@@ -1,9 +1,9 @@
 {
-  "updatedAt": "2026-10-19T01:03:08.141Z",
+  "updatedAt": "2026-10-19T05:59:56.707Z",
   "kpis": {
     "today": {
-      "buscas": 536,
-      "carrinho": 298,
+      "buscas": 539,
+      "carrinho": 299,
       "resumo": 265,
       "checkout": 58,
       "compras": 10
@@ -26,8 +26,8 @@
   "funnel": {
     "today": {
       "cadastro": "26.4",
-      "login": "18.0",
-      "geral": "3.4"
+      "login": "17.5",
+      "geral": "3.3"
     },
     "baseline30": {
       "cadastro": 30.6,
@@ -43,28 +43,28 @@
   "origins": [
     {
       "tela": "Aqui ads",
-      "volume": 81,
-      "conversao": "60.4"
+      "volume": 87,
+      "conversao": "62.1"
     },
     {
       "tela": "Resumo - Aqui ads",
       "volume": 23,
-      "conversao": "17.2"
+      "conversao": "16.4"
     },
     {
       "tela": "Resultados - Aqui ads",
       "volume": 18,
-      "conversao": "13.4"
+      "conversao": "12.9"
     },
     {
       "tela": "Assistente de anúncios - Aqui ads",
       "volume": 7,
-      "conversao": "5.2"
+      "conversao": "5.0"
     },
     {
       "tela": "MSD Saúde Animal - Aqui ads",
       "volume": 2,
-      "conversao": "1.5"
+      "conversao": "1.4"
     },
     {
       "tela": "Sua campanha está no ar! - Aqui ads",
