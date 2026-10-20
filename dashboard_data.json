@@ -1,85 +1,87 @@
 {
-  "updatedAt": "2026-10-20T13:44:44.968Z",
+  "updatedAt": "2026-10-20T13:46:01.567Z",
+  "weekdaysOnly": true,
+  "kpiWeekdaysCount": 3,
   "kpis": {
     "today": {
-      "buscas": 668,
-      "carrinho": 378,
-      "resumo": 326,
-      "checkout": 74,
-      "compras": 12
+      "buscas": 932,
+      "carrinho": 555,
+      "resumo": 465,
+      "checkout": 112,
+      "compras": 18
     },
     "baseline30": {
-      "buscas": 889,
-      "carrinho": 425,
-      "resumo": 329,
-      "checkout": 43,
-      "compras": 16
+      "buscas": 1077,
+      "carrinho": 563,
+      "resumo": 423,
+      "checkout": 56,
+      "compras": 20
     },
     "baseline90": {
-      "buscas": 884,
-      "carrinho": 391,
-      "resumo": 295,
-      "checkout": 49,
-      "compras": 12
+      "buscas": 1060,
+      "carrinho": 522,
+      "resumo": 225,
+      "checkout": 62,
+      "compras": 16
     }
   },
   "funnel": {
     "today": {
-      "cadastro": "27.1",
-      "login": "17.7",
-      "geral": "3.2"
+      "cadastro": 27.5,
+      "login": 18.8,
+      "geral": 3.1
     },
     "baseline30": {
-      "cadastro": 30.6,
-      "login": 15.6,
-      "geral": 3.8
+      "cadastro": 31.4,
+      "login": 17.4,
+      "geral": 3.6
     },
     "baseline90": {
-      "cadastro": 43.9,
-      "login": 8.5,
+      "cadastro": 46.2,
+      "login": 14,
       "geral": 3.1
     }
   },
   "origins": [
     {
       "tela": "Aqui ads",
-      "volume": 151,
-      "conversao": "65.4"
+      "volume": 138,
+      "conversao": 68.3
     },
     {
       "tela": "Resumo - Aqui ads",
-      "volume": 36,
-      "conversao": "15.6"
+      "volume": 29,
+      "conversao": 14.4
     },
     {
       "tela": "Resultados - Aqui ads",
-      "volume": 27,
-      "conversao": "11.7"
+      "volume": 21,
+      "conversao": 10.4
     },
     {
       "tela": "Assistente de anúncios - Aqui ads",
-      "volume": 8,
-      "conversao": "3.5"
+      "volume": 6,
+      "conversao": 3
     },
     {
       "tela": "MSD Saúde Animal - Aqui ads",
       "volume": 4,
-      "conversao": "1.7"
+      "conversao": 2
     },
     {
       "tela": "Login - Aqui ads",
-      "volume": 3,
-      "conversao": "1.3"
+      "volume": 2,
+      "conversao": 1
     },
     {
       "tela": "Shopping Mueller - Aqui ads",
       "volume": 1,
-      "conversao": "0.4"
+      "conversao": 0.5
     },
     {
       "tela": "Sua campanha está no ar! - Aqui ads",
       "volume": 1,
-      "conversao": "0.4"
+      "conversao": 0.5
     }
   ]
 }
