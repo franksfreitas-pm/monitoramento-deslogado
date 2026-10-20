@@ -1,28 +1,28 @@
 {
-  "updatedAt": "2026-10-20T15:03:12.888Z",
+  "updatedAt": "2026-10-20T15:08:27.520Z",
   "weekdaysOnly": true,
-  "excludeZeroDays": true,
+  "checkoutUsesPageView": true,
   "kpiWeekdaysCount": 3,
   "kpis": {
     "today": {
       "buscas": 932,
       "carrinho": 555,
       "resumo": 465,
-      "checkout": 112,
+      "checkout": 104,
       "compras": 18
     },
     "baseline30": {
       "buscas": 1077,
       "carrinho": 563,
       "resumo": 423,
-      "checkout": 94,
+      "checkout": 89,
       "compras": 20
     },
     "baseline90": {
       "buscas": 1060,
       "carrinho": 522,
-      "resumo": 401,
-      "checkout": 73,
+      "resumo": 225,
+      "checkout": 44,
       "compras": 16
     }
   },
@@ -301,47 +301,83 @@
       "checkout": [
         {
           "date": "2026-09-14",
-          "value": 93
+          "value": 124
+        },
+        {
+          "date": "2026-09-15",
+          "value": 50
+        },
+        {
+          "date": "2026-09-16",
+          "value": 67
+        },
+        {
+          "date": "2026-09-17",
+          "value": 104
+        },
+        {
+          "date": "2026-09-18",
+          "value": 76
+        },
+        {
+          "date": "2026-09-21",
+          "value": 60
+        },
+        {
+          "date": "2026-09-22",
+          "value": 109
+        },
+        {
+          "date": "2026-09-23",
+          "value": 83
+        },
+        {
+          "date": "2026-09-24",
+          "value": 97
+        },
+        {
+          "date": "2026-09-25",
+          "value": 81
         },
         {
           "date": "2026-09-28",
-          "value": 52
-        },
-        {
-          "date": "2026-09-29",
-          "value": 95
-        },
-        {
-          "date": "2026-09-30",
-          "value": 148
-        },
-        {
-          "date": "2026-10-01",
-          "value": 110
-        },
-        {
-          "date": "2026-10-02",
-          "value": 70
-        },
-        {
-          "date": "2026-10-05",
           "value": 64
         },
         {
+          "date": "2026-09-29",
+          "value": 92
+        },
+        {
+          "date": "2026-09-30",
+          "value": 142
+        },
+        {
+          "date": "2026-10-01",
+          "value": 109
+        },
+        {
+          "date": "2026-10-02",
+          "value": 69
+        },
+        {
+          "date": "2026-10-05",
+          "value": 59
+        },
+        {
           "date": "2026-10-06",
-          "value": 120
+          "value": 113
         },
         {
           "date": "2026-10-07",
-          "value": 99
+          "value": 91
         },
         {
           "date": "2026-10-08",
-          "value": 121
+          "value": 117
         },
         {
           "date": "2026-10-09",
-          "value": 134
+          "value": 127
         },
         {
           "date": "2026-10-12",
@@ -349,7 +385,7 @@
         },
         {
           "date": "2026-10-13",
-          "value": 100
+          "value": 98
         }
       ],
       "compras": [
@@ -489,15 +525,15 @@
       "checkout": [
         {
           "date": "2026-10-15",
-          "value": 83
+          "value": 80
         },
         {
           "date": "2026-10-16",
-          "value": 116
+          "value": 110
         },
         {
           "date": "2026-10-19",
-          "value": 138
+          "value": 121
         }
       ],
       "compras": [
