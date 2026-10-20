@@ -1,6 +1,7 @@
 {
-  "updatedAt": "2026-10-20T14:49:47.333Z",
+  "updatedAt": "2026-10-20T15:03:12.888Z",
   "weekdaysOnly": true,
+  "excludeZeroDays": true,
   "kpiWeekdaysCount": 3,
   "kpis": {
     "today": {
@@ -14,14 +15,14 @@
       "buscas": 1077,
       "carrinho": 563,
       "resumo": 423,
-      "checkout": 56,
+      "checkout": 94,
       "compras": 20
     },
     "baseline90": {
       "buscas": 1060,
       "carrinho": 522,
-      "resumo": 225,
-      "checkout": 62,
+      "resumo": 401,
+      "checkout": 73,
       "compras": 16
     }
   },
@@ -303,42 +304,6 @@
           "value": 93
         },
         {
-          "date": "2026-09-15",
-          "value": 0
-        },
-        {
-          "date": "2026-09-16",
-          "value": 0
-        },
-        {
-          "date": "2026-09-17",
-          "value": 0
-        },
-        {
-          "date": "2026-09-18",
-          "value": 0
-        },
-        {
-          "date": "2026-09-21",
-          "value": 0
-        },
-        {
-          "date": "2026-09-22",
-          "value": 0
-        },
-        {
-          "date": "2026-09-23",
-          "value": 0
-        },
-        {
-          "date": "2026-09-24",
-          "value": 0
-        },
-        {
-          "date": "2026-09-25",
-          "value": 0
-        },
-        {
           "date": "2026-09-28",
           "value": 52
         },
@@ -554,7 +519,7 @@
   "funnel": {
     "today": {
       "cadastro": 28,
-      "login": 19.2,
+      "login": 19.1,
       "geral": 3.2
     },
     "baseline30": {
@@ -571,18 +536,18 @@
   "origins": [
     {
       "tela": "Aqui ads",
-      "volume": 146,
-      "conversao": 69.2
+      "volume": 148,
+      "conversao": 69.5
     },
     {
       "tela": "Resumo - Aqui ads",
       "volume": 29,
-      "conversao": 13.7
+      "conversao": 13.6
     },
     {
       "tela": "Resultados - Aqui ads",
       "volume": 22,
-      "conversao": 10.4
+      "conversao": 10.3
     },
     {
       "tela": "Assistente de anúncios - Aqui ads",
