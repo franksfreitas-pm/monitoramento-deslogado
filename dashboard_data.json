@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-20T13:37:40.944Z",
+  "updatedAt": "2026-10-20T13:44:44.968Z",
   "kpis": {
     "today": {
       "buscas": 668,
@@ -25,7 +25,7 @@
   },
   "funnel": {
     "today": {
-      "cadastro": "27.3",
+      "cadastro": "27.1",
       "login": "17.7",
       "geral": "3.2"
     },
@@ -43,13 +43,13 @@
   "origins": [
     {
       "tela": "Aqui ads",
-      "volume": 150,
-      "conversao": "65.2"
+      "volume": 151,
+      "conversao": "65.4"
     },
     {
       "tela": "Resumo - Aqui ads",
       "volume": 36,
-      "conversao": "15.7"
+      "conversao": "15.6"
     },
     {
       "tela": "Resultados - Aqui ads",
