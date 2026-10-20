@@ -377,7 +377,7 @@
                         const paddingY = 8;
                         const drawW = width - paddingX * 2;
                         const drawH = height - paddingY * 2;
-                        const maxPoints = 22;
+                        const maxPoints = Math.max(baselineData.length, currentData.length, 2);
                         
                         let maxVal = 0, minVal = Infinity;
                         baselineData.forEach(d => { if(d.value > maxVal) maxVal = d.value; if(d.value < minVal) minVal = d.value; });
