@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-20T06:28:30.394Z",
+  "updatedAt": "2026-10-20T07:41:41.607Z",
   "kpis": {
     "today": {
       "buscas": 668,
@@ -26,7 +26,7 @@
   "funnel": {
     "today": {
       "cadastro": "28.9",
-      "login": "17.6",
+      "login": "17.7",
       "geral": "3.2"
     },
     "baseline30": {
