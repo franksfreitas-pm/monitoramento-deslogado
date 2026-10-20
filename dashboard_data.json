@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-20T00:44:19.094Z",
+  "updatedAt": "2026-10-20T01:53:44.064Z",
   "kpis": {
     "today": {
       "buscas": 539,
@@ -26,7 +26,7 @@
   "funnel": {
     "today": {
       "cadastro": "28.0",
-      "login": "17.9",
+      "login": "17.8",
       "geral": "3.3"
     },
     "baseline30": {
@@ -72,12 +72,12 @@
       "conversao": "0.9"
     },
     {
-      "tela": "Shopping Mueller - Aqui ads",
+      "tela": "Sua campanha está no ar! - Aqui ads",
       "volume": 1,
       "conversao": "0.5"
     },
     {
-      "tela": "Sua campanha está no ar! - Aqui ads",
+      "tela": "Shopping Mueller - Aqui ads",
       "volume": 1,
       "conversao": "0.5"
     }
