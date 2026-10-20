@@ -82,9 +82,8 @@ const b90Start = "2026-07-16";
 const b30Start = "2026-09-14";
 const bEnd = "2026-10-13";
 const b30Dates = getWeekdaysList(b30Start, bEnd); // 22 dias úteis
-const b90Dates = getWeekdaysList(b90Start, bEnd); // 64 dias úteis
 const b30Weekdays = Math.max(1, b30Dates.length);
-const b90Weekdays = Math.max(1, b90Dates.length);
+const b90Weekdays = Math.max(1, countWeekdays(b90Start, bEnd)); // 64 dias úteis
 
 // Janelas Pós-Lançamento (a partir de 15/10, apenas dias úteis)
 const fetchStart = "2026-10-15";
@@ -93,7 +92,7 @@ const kpiEnd = yesterdayStr < fetchStart ? fetchStart : yesterdayStr;
 const kpiDates = getWeekdaysList(fetchStart, kpiEnd);
 const kpiWeekdays = Math.max(1, kpiDates.length);
 
-// Busca série diária de um evento e retorna somas e séries diárias filtradas apenas para DIAS ÚTEIS ATIVOS (desconsiderando apagões zerados)
+// Busca série diária de um evento e retorna somas e séries diárias filtradas apenas para DIAS ÚTEIS
 async function fetchEventSeries(event, fromDate, property = "time", filterPropValue = null) {
     const url = `/api/2.0/events/properties?project_id=${projectId}&event=${event}&name=${property}&type=general&unit=day&from_date=${fromDate}&to_date=${fetchEndToday}`;
     const result = await fetchMixpanel(url);
@@ -108,8 +107,8 @@ async function fetchEventSeries(event, fromDate, property = "time", filterPropVa
         return {
             sum30, sum90, sumKpi, sumRealtime,
             kpiAvg: 0, b30Avg: 0, b90Avg: 0,
-            series30: [],
-            seriesCurrent: []
+            series30: b30Dates.map(d => ({ date: d, value: 0 })),
+            seriesCurrent: kpiDates.map(d => ({ date: d, value: 0 }))
         };
     }
 
@@ -138,29 +137,19 @@ async function fetchEventSeries(event, fromDate, property = "time", filterPropVa
         }
     }
 
-    // Desconsidera dias úteis zerados por falha de rastreamento no cálculo da média e na série do gráfico
-    const active30List = b30Dates
-        .map(d => ({ date: d, value: dailyMap[d] || 0 }))
-        .filter(pt => pt.value > 0);
-    const active90Count = b90Dates.filter(d => (dailyMap[d] || 0) > 0).length;
-    const activeKpiList = kpiDates
-        .map(d => ({ date: d, value: dailyMap[d] || 0 }))
-        .filter(pt => pt.value > 0);
-
-    const divisor30 = active30List.length > 0 ? active30List.length : b30Weekdays;
-    const divisor90 = active90Count > 0 ? active90Count : b90Weekdays;
-    const divisorKpi = activeKpiList.length > 0 ? activeKpiList.length : kpiWeekdays;
+    const series30 = b30Dates.map(d => ({ date: d, value: dailyMap[d] || 0 }));
+    const seriesCurrent = kpiDates.map(d => ({ date: d, value: dailyMap[d] || 0 }));
 
     return {
         sum30,
         sum90,
         sumKpi,
         sumRealtime,
-        kpiAvg: Math.round(sumKpi / divisorKpi),
-        b30Avg: Math.round(sum30 / divisor30),
-        b90Avg: Math.round(sum90 / divisor90),
-        series30: active30List,
-        seriesCurrent: activeKpiList
+        kpiAvg: Math.round(sumKpi / kpiWeekdays),
+        b30Avg: Math.round(sum30 / b30Weekdays),
+        b90Avg: Math.round(sum90 / b90Weekdays),
+        series30,
+        seriesCurrent
     };
 }
 
@@ -212,7 +201,7 @@ async function extractAllData() {
         try {
             existing = JSON.parse(fs.readFileSync(outputPath, 'utf8'));
             const hasCharts = existing && existing.charts && existing.charts.baseline30 && Array.isArray(existing.charts.baseline30.buscas);
-            if (!isForced && !isRecalcBaselines && existing && existing.weekdaysOnly === true && existing.excludeZeroDays === true && hasCharts && existing.updatedAt) {
+            if (!isForced && !isRecalcBaselines && existing && existing.weekdaysOnly === true && existing.checkoutUsesPageView === true && hasCharts && existing.updatedAt) {
                 const diffMinutes = (Date.now() - new Date(existing.updatedAt).getTime()) / 60000;
                 if (diffMinutes < 50) {
                     console.log(`Última atualização ocorreu há ${diffMinutes.toFixed(1)} min (< 50 min). Ignorando execução para poupar cota do Mixpanel.`);
@@ -225,10 +214,10 @@ async function extractAllData() {
     }
 
     const hasBaselineCharts = existing && existing.charts && existing.charts.baseline30 && Array.isArray(existing.charts.baseline30.buscas) && existing.charts.baseline30.buscas.length > 0;
-    const needBaselines = isRecalcBaselines || !existing || existing.weekdaysOnly !== true || existing.excludeZeroDays !== true || !hasBaselineCharts;
+    const needBaselines = isRecalcBaselines || !existing || existing.weekdaysOnly !== true || existing.checkoutUsesPageView !== true || !hasBaselineCharts;
     const queryFromDate = needBaselines ? b90Start : fetchStart;
 
-    console.log(`Iniciando extração (Apenas Dias Úteis Ativos | kpiWeekdays=${kpiWeekdays} | queryFrom=${queryFromDate})...`);
+    console.log(`Iniciando extração (Apenas Dias Úteis | kpiWeekdays=${kpiWeekdays} | queryFrom=${queryFromDate})...`);
 
     console.log("1/9 Buscando Buscas...");
     const buscas = await fetchEventSeries('inventory_address_search_executed', queryFromDate);
@@ -239,8 +228,8 @@ async function extractAllData() {
     console.log("3/9 Buscando Página de Resumo...");
     const resumo = await fetchEventSeries('page_view', queryFromDate, 'page_title', 'Resumo - Aqui ads');
 
-    console.log("4/9 Buscando Início de Checkout...");
-    const checkout = await fetchEventSeries('begin_checkout', queryFromDate);
+    console.log("4/9 Buscando Acesso ao Pagamento (Visualização de Página = Pagamento - Aqui ads)...");
+    const checkout = await fetchEventSeries('page_view', queryFromDate, 'page_title', 'Pagamento - Aqui ads');
 
     console.log("5/9 Buscando Compras Aprovadas...");
     const compras = await fetchEventSeries('payment_approved', queryFromDate);
@@ -301,7 +290,7 @@ async function extractAllData() {
     const data = {
         updatedAt: new Date().toISOString(),
         weekdaysOnly: true,
-        excludeZeroDays: true,
+        checkoutUsesPageView: true,
         kpiWeekdaysCount: kpiWeekdays,
         kpis: {
             today: {
@@ -337,7 +326,7 @@ async function extractAllData() {
     };
 
     fs.writeFileSync(outputPath, JSON.stringify(data, null, 2));
-    console.log(`Extração concluída com sucesso (Apenas Dias Úteis Ativos + Séries Diárias)! Dados salvos em: ${outputPath}`);
+    console.log(`Extração concluída com sucesso (Apenas Dias Úteis + Pagamento - Aqui ads)! Dados salvos em: ${outputPath}`);
 }
 
 extractAllData();
