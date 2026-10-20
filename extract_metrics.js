@@ -36,130 +36,149 @@ async function fetchMixpanel(endpoint, retries = 3) {
             });
             return data;
         } catch (e) {
-            console.error(`Erro na requisição (tentativa ${i+1}): ${e.message}`);
+            console.error(`Erro na requisição (tentativa ${i + 1}): ${e.message}`);
             if (i === retries - 1) throw e;
             await new Promise(r => setTimeout(r, 2000));
         }
     }
 }
 
-// Configuração de Hoje (a partir de 15/10)
+// Verifica se uma data YYYY-MM-DD cai no sábado (6) ou domingo (0)
+function isWeekend(dateStr) {
+    const day = new Date(dateStr + "T12:00:00Z").getUTCDay();
+    return day === 0 || day === 6;
+}
+
+// Conta quantos dias úteis (segunda a sexta) existem no intervalo [startStr, endStr]
+function countWeekdays(startStr, endStr) {
+    if (endStr < startStr) return 0;
+    let count = 0;
+    let cur = new Date(startStr + "T12:00:00Z");
+    const end = new Date(endStr + "T12:00:00Z");
+    while (cur <= end) {
+        const day = cur.getUTCDay();
+        if (day !== 0 && day !== 6) count++;
+        cur = new Date(cur.getTime() + 86400000);
+    }
+    return count;
+}
+
+// Configuração de datas em Horário de Brasília (UTC-3)
 const brtNowMs = Date.now() - (3 * 60 * 60 * 1000);
 const todayObj = new Date(brtNowMs);
 const todayStr = todayObj.toISOString().split("T")[0];
 const yesterdayObj = new Date(brtNowMs - 86400000);
 const yesterdayStr = yesterdayObj.toISOString().split("T")[0];
 
+// Janelas de Baseline (Dias Úteis até 13/10)
+const b90Start = "2026-07-16";
+const b30Start = "2026-09-14";
+const bEnd = "2026-10-13";
+const b30Weekdays = Math.max(1, countWeekdays(b30Start, bEnd)); // 22 dias úteis
+const b90Weekdays = Math.max(1, countWeekdays(b90Start, bEnd)); // 64 dias úteis
+
+// Janelas Pós-Lançamento (a partir de 15/10, apenas dias úteis)
 const fetchStart = "2026-10-15";
 const fetchEndToday = todayStr < fetchStart ? fetchStart : todayStr;
+const kpiEnd = yesterdayStr < fetchStart ? fetchStart : yesterdayStr;
+const kpiWeekdays = Math.max(1, countWeekdays(fetchStart, kpiEnd));
 
-let kpiEnd = yesterdayStr < fetchStart ? fetchStart : yesterdayStr;
-let kpiDays = 1;
-if (kpiEnd >= fetchStart) {
-    const startMs = new Date(fetchStart + "T00:00:00Z").getTime();
-    const endMs = new Date(kpiEnd + "T00:00:00Z").getTime();
-    kpiDays = Math.floor((endMs - startMs) / (1000 * 60 * 60 * 24)) + 1;
-}
-if(kpiDays < 1) kpiDays = 1;
-
-async function fetchKpiMetric(event, property = "time") {
-    const url = "/api/2.0/events/properties?project_id="+projectId+"&event="+event+"&name="+property+"&type=general&unit=day&from_date="+fetchStart+"&to_date="+kpiEnd;
+// Busca série diária de um evento e retorna somas filtradas apenas para DIAS ÚTEIS
+async function fetchEventSeries(event, fromDate, property = "time", filterPropValue = null) {
+    const url = `/api/2.0/events/properties?project_id=${projectId}&event=${event}&name=${property}&type=general&unit=day&from_date=${fromDate}&to_date=${fetchEndToday}`;
     const result = await fetchMixpanel(url);
-    let total = 0;
-    if (!result || !result.data || !result.data.values) return 0;
-    for (const [propName, datesObj] of Object.entries(result.data.values)) {
+
+    let sum30 = 0;
+    let sum90 = 0;
+    let sumKpi = 0;
+    let sumRealtime = 0;
+
+    if (!result || !result.data || !result.data.values) {
+        return { sum30, sum90, sumKpi, sumRealtime, kpiAvg: 0, b30Avg: 0, b90Avg: 0 };
+    }
+
+    const entries = filterPropValue
+        ? (result.data.values[filterPropValue] ? [[filterPropValue, result.data.values[filterPropValue]]] : [])
+        : Object.entries(result.data.values);
+
+    for (const [, datesObj] of entries) {
         for (const [dateStr, value] of Object.entries(datesObj)) {
-            total += value;
+            if (isWeekend(dateStr)) continue; // Exclui sábado e domingo de todas as análises
+
+            if (dateStr >= b90Start && dateStr <= bEnd) {
+                sum90 += value;
+            }
+            if (dateStr >= b30Start && dateStr <= bEnd) {
+                sum30 += value;
+            }
+            if (dateStr >= fetchStart && dateStr <= kpiEnd) {
+                sumKpi += value;
+            }
+            if (dateStr >= fetchStart && dateStr <= fetchEndToday) {
+                sumRealtime += value;
+            }
         }
     }
-    return Math.round(total / kpiDays);
+
+    return {
+        sum30,
+        sum90,
+        sumKpi,
+        sumRealtime,
+        kpiAvg: Math.round(sumKpi / kpiWeekdays),
+        b30Avg: Math.round(sum30 / b30Weekdays),
+        b90Avg: Math.round(sum90 / b90Weekdays)
+    };
 }
 
-async function fetchKpiPageViewResumo() {
-    const url = "/api/2.0/events/properties?project_id="+projectId+"&event=page_view&name=page_title&type=general&unit=day&from_date="+fetchStart+"&to_date="+kpiEnd;
-    const result = await fetchMixpanel(url);
-    let total = 0;
-    if (!result || !result.data || !result.data.values || !result.data.values["Resumo - Aqui ads"]) return 0;
-    for (const [dateStr, value] of Object.entries(result.data.values["Resumo - Aqui ads"])) {
-        total += value;
-    }
-    return Math.round(total / kpiDays);
-}
-
-// Funcao para pegar uma metrica no D0 (Funil em Tempo Real)
-async function fetchMetricToday(event, property = "time") {
-    const url = "/api/2.0/events/properties?project_id="+projectId+"&event="+event+"&name="+property+"&type=general&unit=day&from_date="+fetchStart+"&to_date="+fetchEndToday;
-    const result = await fetchMixpanel(url);
-    
-    let totalToday = 0;
-    if (!result || !result.data || !result.data.values) return totalToday;
-    
-    for (const [propName, datesObj] of Object.entries(result.data.values)) {
-        for (const [dateStr, value] of Object.entries(datesObj)) {
-            totalToday += value;
-        }
-    }
-    return totalToday;
-}
-
-// Volume de page_view do resumo "Hoje"
-async function fetchPageViewResumoToday() {
-    const url = `/api/2.0/events/properties?project_id=${projectId}&event=page_view&name=page_title&type=general&unit=day&from_date=${fetchStart}&to_date=${fetchEndToday}`;
-    const result = await fetchMixpanel(url);
-    
-    let totalToday = 0;
-    if (!result || !result.data || !result.data.values || !result.data.values['Resumo - Aqui ads']) return totalToday;
-    
-    for (const [dateStr, value] of Object.entries(result.data.values['Resumo - Aqui ads'])) {
-        totalToday += value;
-    }
-    return totalToday;
-}
-
-// Pegar origens do login "Hoje" (apenas a partir do dia 15)
+// Pegar origens do login acumuladas pós-lançamento (apenas dias úteis a partir de 15/10)
 async function fetchLoginOriginsToday() {
     const url = `/api/2.0/events/properties?project_id=${projectId}&event=main_login_verified&name=page_title&type=general&unit=day&from_date=${fetchStart}&to_date=${fetchEndToday}`;
     const result = await fetchMixpanel(url);
-    
+
     const originsMap = {};
     let totalVolume = 0;
-    
+
     if (result && result.data && result.data.values) {
         for (const [pageTitle, datesObj] of Object.entries(result.data.values)) {
             let volumeForPeriod = 0;
             for (const [dateStr, value] of Object.entries(datesObj)) {
+                if (isWeekend(dateStr)) continue; // Exclui sábado e domingo
                 volumeForPeriod += value;
             }
             if (volumeForPeriod > 0) {
-                const safeTitle = (pageTitle && pageTitle !== 'undefined' && pageTitle !== 'null' && pageTitle.trim() !== '') 
-                    ? pageTitle 
+                const safeTitle = (pageTitle && pageTitle !== 'undefined' && pageTitle !== 'null' && pageTitle.trim() !== '')
+                    ? pageTitle
                     : 'Acesso Direto / Sem Título';
-                
+
                 originsMap[safeTitle] = (originsMap[safeTitle] || 0) + volumeForPeriod;
                 totalVolume += volumeForPeriod;
             }
         }
     }
-    
+
     const sortedOrigins = Object.entries(originsMap)
         .map(([tela, volume]) => ({
             tela,
             volume,
-            conversao: totalVolume > 0 ? ((volume / totalVolume) * 100).toFixed(1) : 0
+            conversao: totalVolume > 0 ? Number(((volume / totalVolume) * 100).toFixed(1)) : 0
         }))
-        .sort((a,b) => b.volume - a.volume)
+        .sort((a, b) => b.volume - a.volume)
         .slice(0, 10);
-        
+
     return sortedOrigins;
 }
 
 async function extractAllData() {
-    const existingPath = path.join(__dirname, 'dashboard_data.json');
+    const outputPath = path.join(__dirname, 'dashboard_data.json');
     const isForced = process.argv.includes('--force');
-    if (!isForced && fs.existsSync(existingPath)) {
+    const isRecalcBaselines = process.argv.includes('--recalc-baselines');
+
+    let existing = null;
+    if (fs.existsSync(outputPath)) {
         try {
-            const existing = JSON.parse(fs.readFileSync(existingPath, 'utf8'));
-            if (existing && existing.updatedAt) {
+            existing = JSON.parse(fs.readFileSync(outputPath, 'utf8'));
+            if (!isForced && !isRecalcBaselines && existing && existing.weekdaysOnly === true && existing.updatedAt) {
                 const diffMinutes = (Date.now() - new Date(existing.updatedAt).getTime()) / 60000;
                 if (diffMinutes < 50) {
                     console.log(`Última atualização ocorreu há ${diffMinutes.toFixed(1)} min (< 50 min). Ignorando execução para poupar cota do Mixpanel.`);
@@ -171,57 +190,100 @@ async function extractAllData() {
         }
     }
 
-    console.log("Iniciando extração otimizada: APENAS HOJE. Baselines estão fixados.");
+    const needBaselines = isRecalcBaselines || !existing || existing.weekdaysOnly !== true;
+    const queryFromDate = needBaselines ? b90Start : fetchStart;
+
+    console.log(`Iniciando extração (Apenas Dias Úteis | kpiWeekdays=${kpiWeekdays} | queryFrom=${queryFromDate})...`);
+
+    console.log("1/9 Buscando Buscas...");
+    const buscas = await fetchEventSeries('inventory_address_search_executed', queryFromDate);
+
+    console.log("2/9 Buscando Adição ao Carrinho...");
+    const carrinho = await fetchEventSeries('inventory_item_added', queryFromDate);
+
+    console.log("3/9 Buscando Página de Resumo...");
+    const resumo = await fetchEventSeries('page_view', queryFromDate, 'page_title', 'Resumo - Aqui ads');
+
+    console.log("4/9 Buscando Início de Checkout...");
+    const checkout = await fetchEventSeries('begin_checkout', queryFromDate);
+
+    console.log("5/9 Buscando Compras Aprovadas...");
+    const compras = await fetchEventSeries('payment_approved', queryFromDate);
+
+    console.log("6/9 Buscando Início de Login...");
+    const loginStarted = await fetchEventSeries('main_login_started', queryFromDate);
+
+    console.log("7/9 Buscando Conclusão de Login...");
+    const loginCompleted = await fetchEventSeries('login', queryFromDate);
+
+    console.log("8/9 Buscando Início de Cadastro...");
+    const signupStarted = await fetchEventSeries('main_signup_started', queryFromDate);
+
+    console.log("9/9 Buscando Conclusão de Cadastro...");
+    const signupCompleted = await fetchEventSeries('main_signup_completed', queryFromDate);
+
+    console.log("Buscando Origens do Login (Dias Úteis)...");
+    const origins = await fetchLoginOriginsToday();
+
+    const calcRate = (num, den) => den > 0 ? Number(((num / den) * 100).toFixed(1)) : 0;
+
+    const baseline30Kpis = needBaselines ? {
+        buscas: buscas.b30Avg,
+        carrinho: carrinho.b30Avg,
+        resumo: resumo.b30Avg,
+        checkout: checkout.b30Avg,
+        compras: compras.b30Avg
+    } : existing.kpis.baseline30;
+
+    const baseline90Kpis = needBaselines ? {
+        buscas: buscas.b90Avg,
+        carrinho: carrinho.b90Avg,
+        resumo: resumo.b90Avg,
+        checkout: checkout.b90Avg,
+        compras: compras.b90Avg
+    } : existing.kpis.baseline90;
+
+    const baseline30Funnel = needBaselines ? {
+        cadastro: calcRate(signupCompleted.sum30, signupStarted.sum30),
+        login: calcRate(loginCompleted.sum30, loginStarted.sum30),
+        geral: calcRate(compras.sum30, carrinho.sum30)
+    } : existing.funnel.baseline30;
+
+    const baseline90Funnel = needBaselines ? {
+        cadastro: calcRate(signupCompleted.sum90, signupStarted.sum90),
+        login: calcRate(loginCompleted.sum90, loginStarted.sum90),
+        geral: calcRate(compras.sum90, carrinho.sum90)
+    } : existing.funnel.baseline90;
 
     const data = {
         updatedAt: new Date().toISOString(),
+        weekdaysOnly: true,
+        kpiWeekdaysCount: kpiWeekdays,
         kpis: {
-            today: {},
-            baseline30: { buscas: 889, carrinho: 425, resumo: 329, checkout: 43, compras: 16 },
-            baseline90: { buscas: 884, carrinho: 391, resumo: 295, checkout: 49, compras: 12 }
+            today: {
+                buscas: buscas.kpiAvg,
+                carrinho: carrinho.kpiAvg,
+                resumo: resumo.kpiAvg,
+                checkout: checkout.kpiAvg,
+                compras: compras.kpiAvg
+            },
+            baseline30: baseline30Kpis,
+            baseline90: baseline90Kpis
         },
         funnel: {
-            today: {},
-            baseline30: { cadastro: 30.6, login: 15.6, geral: 3.8 },
-            baseline90: { cadastro: 43.9, login: 8.5, geral: 3.1 }
+            today: {
+                cadastro: calcRate(signupCompleted.sumRealtime, signupStarted.sumRealtime),
+                login: calcRate(loginCompleted.sumRealtime, loginStarted.sumRealtime),
+                geral: calcRate(compras.sumRealtime, carrinho.sumRealtime)
+            },
+            baseline30: baseline30Funnel,
+            baseline90: baseline90Funnel
         },
-        origins: []
+        origins
     };
 
-    console.log("Buscando Buscas Hoje...");
-    data.kpis.today.buscas = await fetchKpiMetric('inventory_address_search_executed');
-    
-    console.log("Buscando Carrinho Hoje...");
-    data.kpis.today.carrinho = await fetchKpiMetric('inventory_item_added');
-    
-    console.log("Buscando Resumo Hoje...");
-    data.kpis.today.resumo = await fetchKpiPageViewResumo();
-    
-    console.log("Buscando Checkout Hoje...");
-    data.kpis.today.checkout = await fetchKpiMetric('begin_checkout');
-    
-    console.log("Buscando Compras Hoje...");
-    data.kpis.today.compras = await fetchKpiMetric('payment_approved');
-    
-    console.log("Buscando Funis Hoje...");
-    const loginStarted = await fetchMetricToday('main_login_started');
-    const loginCompleted = await fetchMetricToday('login');
-    const signupStarted = await fetchMetricToday('main_signup_started');
-    const signupCompleted = await fetchMetricToday('main_signup_completed');
-
-    data.funnel.today = {
-        cadastro: signupStarted > 0 ? ((signupCompleted / signupStarted) * 100).toFixed(1) : 0,
-        login: loginStarted > 0 ? ((loginCompleted / loginStarted) * 100).toFixed(1) : 0,
-        geral: data.kpis.today.carrinho > 0 ? ((data.kpis.today.compras / data.kpis.today.carrinho) * 100).toFixed(1) : 0
-    };
-
-    console.log("Buscando Origens Hoje...");
-    data.origins = await fetchLoginOriginsToday();
-
-    const outputPath = path.join(__dirname, 'dashboard_data.json');
     fs.writeFileSync(outputPath, JSON.stringify(data, null, 2));
-    
-    console.log(`Extração concluída com sucesso! Dados salvos em: ${outputPath}`);
+    console.log(`Extração concluída com sucesso (Apenas Dias Úteis)! Dados salvos em: ${outputPath}`);
 }
 
 extractAllData();

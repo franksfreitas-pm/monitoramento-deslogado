@@ -50,13 +50,13 @@
         <!-- Aviso de Data -->
         <div class="bg-orange-50 border-l-4 border-primary p-4 mb-8 rounded-r">
             <p class="text-sm text-gray-800">
-                <strong class="text-primary font-semibold">Importante:</strong> A linha de base reflete as médias fixas de 30 e 90 dias computadas até o dia 13/10. A nova média pós-lançamento começará a ser contabilizada apenas a partir de <strong>15/10</strong>, isolando o dia do deploy (14/10).
+                <strong class="text-primary font-semibold">Importante:</strong> Todas as análises, médias e baselines consideram <strong>exclusivamente dias úteis (segunda a sexta-feira)</strong>, excluindo finais de semana para evitar distorção de volume. A linha de base reflete os dias úteis das janelas de 30 e 90 dias até 13/10, e o pós-lançamento contabiliza os dias úteis a partir de <strong>15/10</strong> (isolando o deploy em 14/10).
             </p>
         </div>
 
         <!-- Bloco 1: KPIs Gerais -->
         <section class="mb-10">
-            <h2 class="text-xl font-semibold mb-4 text-gray-700">Média das Métricas (Média D-1 vs Baselines)</h2>
+            <h2 class="text-xl font-semibold mb-4 text-gray-700">Média das Métricas (Média D-1 em Dias Úteis vs Baselines)</h2>
             <div class="grid grid-cols-5 gap-4">
                 <!-- KPI 1 -->
                 <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100 flex flex-col justify-between">
@@ -142,7 +142,7 @@
 
         <!-- Bloco 2: Taxas de Conversão -->
         <section class="mb-10">
-            <h2 class="text-xl font-semibold mb-4 text-gray-700">Taxas de Conversão do Funil (Tempo Real)</h2>
+            <h2 class="text-xl font-semibold mb-4 text-gray-700">Taxas de Conversão do Funil (Acumulado em Dias Úteis)</h2>
             <div class="bg-white p-8 rounded-lg shadow-sm border border-gray-100">
                 <div class="grid grid-cols-3 gap-8 divide-x divide-gray-200">
                     <div class="px-4 flex flex-col items-center text-center">
@@ -198,7 +198,7 @@
 
         <!-- Bloco 3: Tabela de Origem do Login -->
         <section class="mb-10">
-            <h2 class="text-xl font-semibold mb-4 text-gray-700">Origem do Login (Páginas)</h2>
+            <h2 class="text-xl font-semibold mb-4 text-gray-700">Origem do Login (Acumulado em Dias Úteis)</h2>
             <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
