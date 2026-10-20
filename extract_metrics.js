@@ -49,18 +49,25 @@ function isWeekend(dateStr) {
     return day === 0 || day === 6;
 }
 
-// Conta quantos dias úteis (segunda a sexta) existem no intervalo [startStr, endStr]
-function countWeekdays(startStr, endStr) {
-    if (endStr < startStr) return 0;
-    let count = 0;
+// Retorna lista ordenada de datas YYYY-MM-DD contendo apenas dias úteis (segunda a sexta)
+function getWeekdaysList(startStr, endStr) {
+    if (endStr < startStr) return [];
+    const list = [];
     let cur = new Date(startStr + "T12:00:00Z");
     const end = new Date(endStr + "T12:00:00Z");
     while (cur <= end) {
         const day = cur.getUTCDay();
-        if (day !== 0 && day !== 6) count++;
+        if (day !== 0 && day !== 6) {
+            list.push(cur.toISOString().split("T")[0]);
+        }
         cur = new Date(cur.getTime() + 86400000);
     }
-    return count;
+    return list;
+}
+
+// Conta quantos dias úteis (segunda a sexta) existem no intervalo [startStr, endStr]
+function countWeekdays(startStr, endStr) {
+    return getWeekdaysList(startStr, endStr).length;
 }
 
 // Configuração de datas em Horário de Brasília (UTC-3)
@@ -74,16 +81,18 @@ const yesterdayStr = yesterdayObj.toISOString().split("T")[0];
 const b90Start = "2026-07-16";
 const b30Start = "2026-09-14";
 const bEnd = "2026-10-13";
-const b30Weekdays = Math.max(1, countWeekdays(b30Start, bEnd)); // 22 dias úteis
+const b30Dates = getWeekdaysList(b30Start, bEnd); // 22 dias úteis
+const b30Weekdays = Math.max(1, b30Dates.length);
 const b90Weekdays = Math.max(1, countWeekdays(b90Start, bEnd)); // 64 dias úteis
 
 // Janelas Pós-Lançamento (a partir de 15/10, apenas dias úteis)
 const fetchStart = "2026-10-15";
 const fetchEndToday = todayStr < fetchStart ? fetchStart : todayStr;
 const kpiEnd = yesterdayStr < fetchStart ? fetchStart : yesterdayStr;
-const kpiWeekdays = Math.max(1, countWeekdays(fetchStart, kpiEnd));
+const kpiDates = getWeekdaysList(fetchStart, kpiEnd);
+const kpiWeekdays = Math.max(1, kpiDates.length);
 
-// Busca série diária de um evento e retorna somas filtradas apenas para DIAS ÚTEIS
+// Busca série diária de um evento e retorna somas e séries diárias filtradas apenas para DIAS ÚTEIS
 async function fetchEventSeries(event, fromDate, property = "time", filterPropValue = null) {
     const url = `/api/2.0/events/properties?project_id=${projectId}&event=${event}&name=${property}&type=general&unit=day&from_date=${fromDate}&to_date=${fetchEndToday}`;
     const result = await fetchMixpanel(url);
@@ -92,9 +101,15 @@ async function fetchEventSeries(event, fromDate, property = "time", filterPropVa
     let sum90 = 0;
     let sumKpi = 0;
     let sumRealtime = 0;
+    const dailyMap = {};
 
     if (!result || !result.data || !result.data.values) {
-        return { sum30, sum90, sumKpi, sumRealtime, kpiAvg: 0, b30Avg: 0, b90Avg: 0 };
+        return {
+            sum30, sum90, sumKpi, sumRealtime,
+            kpiAvg: 0, b30Avg: 0, b90Avg: 0,
+            series30: b30Dates.map(d => ({ date: d, value: 0 })),
+            seriesCurrent: kpiDates.map(d => ({ date: d, value: 0 }))
+        };
     }
 
     const entries = filterPropValue
@@ -104,6 +119,8 @@ async function fetchEventSeries(event, fromDate, property = "time", filterPropVa
     for (const [, datesObj] of entries) {
         for (const [dateStr, value] of Object.entries(datesObj)) {
             if (isWeekend(dateStr)) continue; // Exclui sábado e domingo de todas as análises
+
+            dailyMap[dateStr] = (dailyMap[dateStr] || 0) + value;
 
             if (dateStr >= b90Start && dateStr <= bEnd) {
                 sum90 += value;
@@ -120,6 +137,9 @@ async function fetchEventSeries(event, fromDate, property = "time", filterPropVa
         }
     }
 
+    const series30 = b30Dates.map(d => ({ date: d, value: dailyMap[d] || 0 }));
+    const seriesCurrent = kpiDates.map(d => ({ date: d, value: dailyMap[d] || 0 }));
+
     return {
         sum30,
         sum90,
@@ -127,7 +147,9 @@ async function fetchEventSeries(event, fromDate, property = "time", filterPropVa
         sumRealtime,
         kpiAvg: Math.round(sumKpi / kpiWeekdays),
         b30Avg: Math.round(sum30 / b30Weekdays),
-        b90Avg: Math.round(sum90 / b90Weekdays)
+        b90Avg: Math.round(sum90 / b90Weekdays),
+        series30,
+        seriesCurrent
     };
 }
 
@@ -178,7 +200,8 @@ async function extractAllData() {
     if (fs.existsSync(outputPath)) {
         try {
             existing = JSON.parse(fs.readFileSync(outputPath, 'utf8'));
-            if (!isForced && !isRecalcBaselines && existing && existing.weekdaysOnly === true && existing.updatedAt) {
+            const hasCharts = existing && existing.charts && existing.charts.baseline30 && Array.isArray(existing.charts.baseline30.buscas);
+            if (!isForced && !isRecalcBaselines && existing && existing.weekdaysOnly === true && hasCharts && existing.updatedAt) {
                 const diffMinutes = (Date.now() - new Date(existing.updatedAt).getTime()) / 60000;
                 if (diffMinutes < 50) {
                     console.log(`Última atualização ocorreu há ${diffMinutes.toFixed(1)} min (< 50 min). Ignorando execução para poupar cota do Mixpanel.`);
@@ -190,7 +213,8 @@ async function extractAllData() {
         }
     }
 
-    const needBaselines = isRecalcBaselines || !existing || existing.weekdaysOnly !== true;
+    const hasBaselineCharts = existing && existing.charts && existing.charts.baseline30 && Array.isArray(existing.charts.baseline30.buscas) && existing.charts.baseline30.buscas.length > 0;
+    const needBaselines = isRecalcBaselines || !existing || existing.weekdaysOnly !== true || !hasBaselineCharts;
     const queryFromDate = needBaselines ? b90Start : fetchStart;
 
     console.log(`Iniciando extração (Apenas Dias Úteis | kpiWeekdays=${kpiWeekdays} | queryFrom=${queryFromDate})...`);
@@ -255,6 +279,14 @@ async function extractAllData() {
         geral: calcRate(compras.sum90, carrinho.sum90)
     } : existing.funnel.baseline90;
 
+    const baseline30Charts = needBaselines ? {
+        buscas: buscas.series30,
+        carrinho: carrinho.series30,
+        resumo: resumo.series30,
+        checkout: checkout.series30,
+        compras: compras.series30
+    } : existing.charts.baseline30;
+
     const data = {
         updatedAt: new Date().toISOString(),
         weekdaysOnly: true,
@@ -270,6 +302,16 @@ async function extractAllData() {
             baseline30: baseline30Kpis,
             baseline90: baseline90Kpis
         },
+        charts: {
+            baseline30: baseline30Charts,
+            current: {
+                buscas: buscas.seriesCurrent,
+                carrinho: carrinho.seriesCurrent,
+                resumo: resumo.seriesCurrent,
+                checkout: checkout.seriesCurrent,
+                compras: compras.seriesCurrent
+            }
+        },
         funnel: {
             today: {
                 cadastro: calcRate(signupCompleted.sumRealtime, signupStarted.sumRealtime),
@@ -283,7 +325,7 @@ async function extractAllData() {
     };
 
     fs.writeFileSync(outputPath, JSON.stringify(data, null, 2));
-    console.log(`Extração concluída com sucesso (Apenas Dias Úteis)! Dados salvos em: ${outputPath}`);
+    console.log(`Extração concluída com sucesso (Apenas Dias Úteis + Séries Diárias)! Dados salvos em: ${outputPath}`);
 }
 
 extractAllData();

@@ -60,81 +60,126 @@
             <div class="grid grid-cols-5 gap-4">
                 <!-- KPI 1 -->
                 <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100 flex flex-col justify-between">
-                    <h3 class="text-xs font-medium text-gray-500 mb-1 uppercase">Média de buscas</h3>
-                    <div id="kpi-buscas-hoje" class="text-3xl font-bold text-gray-900 mb-4">--</div>
-                    <div class="flex flex-col space-y-1 text-xs">
-                        <div class="flex justify-between border-b border-gray-50 pb-1">
-                            <span class="text-gray-500">vs Média 30d</span>
-                            <span id="kpi-buscas-30d" class="font-medium text-gray-400">--</span>
+                    <div>
+                        <h3 class="text-xs font-medium text-gray-500 mb-1 uppercase">Média de buscas</h3>
+                        <div id="kpi-buscas-hoje" class="text-3xl font-bold text-gray-900 mb-4">--</div>
+                        <div class="flex flex-col space-y-1 text-xs">
+                            <div class="flex justify-between border-b border-gray-50 pb-1">
+                                <span class="text-gray-500">vs Média 30d</span>
+                                <span id="kpi-buscas-30d" class="font-medium text-gray-400">--</span>
+                            </div>
+                            <div class="flex justify-between pt-1">
+                                <span class="text-gray-500">vs Média 90d</span>
+                                <span id="kpi-buscas-90d" class="font-medium text-gray-400">--</span>
+                            </div>
                         </div>
-                        <div class="flex justify-between pt-1">
-                            <span class="text-gray-500">vs Média 90d</span>
-                            <span id="kpi-buscas-90d" class="font-medium text-gray-400">--</span>
+                    </div>
+                    <div class="border-t border-gray-100 pt-3 mt-4">
+                        <div class="flex items-center justify-between text-[10px] mb-2">
+                            <span class="flex items-center text-primary font-medium"><span class="w-2 h-0.5 bg-primary mr-1"></span> Atual (D-1)</span>
+                            <span class="flex items-center text-gray-400"><span class="w-2 h-0.5 border-t border-dashed border-gray-400 mr-1"></span> 30 dias</span>
                         </div>
+                        <div id="chart-buscas" class="h-24 w-full relative"></div>
                     </div>
                 </div>
 
                 <!-- KPI 2 -->
                 <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100 flex flex-col justify-between">
-                    <h3 class="text-xs font-medium text-gray-500 mb-1 uppercase">Adições no carrinho</h3>
-                    <div id="kpi-carrinho-hoje" class="text-3xl font-bold text-gray-900 mb-4">--</div>
-                    <div class="flex flex-col space-y-1 text-xs">
-                        <div class="flex justify-between border-b border-gray-50 pb-1">
-                            <span class="text-gray-500">vs Média 30d</span>
-                            <span id="kpi-carrinho-30d" class="font-medium text-gray-400">--</span>
+                    <div>
+                        <h3 class="text-xs font-medium text-gray-500 mb-1 uppercase">Adições no carrinho</h3>
+                        <div id="kpi-carrinho-hoje" class="text-3xl font-bold text-gray-900 mb-4">--</div>
+                        <div class="flex flex-col space-y-1 text-xs">
+                            <div class="flex justify-between border-b border-gray-50 pb-1">
+                                <span class="text-gray-500">vs Média 30d</span>
+                                <span id="kpi-carrinho-30d" class="font-medium text-gray-400">--</span>
+                            </div>
+                            <div class="flex justify-between pt-1">
+                                <span class="text-gray-500">vs Média 90d</span>
+                                <span id="kpi-carrinho-90d" class="font-medium text-gray-400">--</span>
+                            </div>
                         </div>
-                        <div class="flex justify-between pt-1">
-                            <span class="text-gray-500">vs Média 90d</span>
-                            <span id="kpi-carrinho-90d" class="font-medium text-gray-400">--</span>
+                    </div>
+                    <div class="border-t border-gray-100 pt-3 mt-4">
+                        <div class="flex items-center justify-between text-[10px] mb-2">
+                            <span class="flex items-center text-primary font-medium"><span class="w-2 h-0.5 bg-primary mr-1"></span> Atual (D-1)</span>
+                            <span class="flex items-center text-gray-400"><span class="w-2 h-0.5 border-t border-dashed border-gray-400 mr-1"></span> 30 dias</span>
                         </div>
+                        <div id="chart-carrinho" class="h-24 w-full relative"></div>
                     </div>
                 </div>
 
                 <!-- KPI 3 -->
                 <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100 flex flex-col justify-between">
-                    <h3 class="text-xs font-medium text-gray-500 mb-1 uppercase">Acesso à pág de resumo</h3>
-                    <div id="kpi-resumo-hoje" class="text-3xl font-bold text-gray-900 mb-4">--</div>
-                    <div class="flex flex-col space-y-1 text-xs">
-                        <div class="flex justify-between border-b border-gray-50 pb-1">
-                            <span class="text-gray-500">vs Média 30d</span>
-                            <span id="kpi-resumo-30d" class="font-medium text-gray-400">--</span>
+                    <div>
+                        <h3 class="text-xs font-medium text-gray-500 mb-1 uppercase">Acesso à pág de resumo</h3>
+                        <div id="kpi-resumo-hoje" class="text-3xl font-bold text-gray-900 mb-4">--</div>
+                        <div class="flex flex-col space-y-1 text-xs">
+                            <div class="flex justify-between border-b border-gray-50 pb-1">
+                                <span class="text-gray-500">vs Média 30d</span>
+                                <span id="kpi-resumo-30d" class="font-medium text-gray-400">--</span>
+                            </div>
+                            <div class="flex justify-between pt-1">
+                                <span class="text-gray-500">vs Média 90d</span>
+                                <span id="kpi-resumo-90d" class="font-medium text-gray-400">--</span>
+                            </div>
                         </div>
-                        <div class="flex justify-between pt-1">
-                            <span class="text-gray-500">vs Média 90d</span>
-                            <span id="kpi-resumo-90d" class="font-medium text-gray-400">--</span>
+                    </div>
+                    <div class="border-t border-gray-100 pt-3 mt-4">
+                        <div class="flex items-center justify-between text-[10px] mb-2">
+                            <span class="flex items-center text-primary font-medium"><span class="w-2 h-0.5 bg-primary mr-1"></span> Atual (D-1)</span>
+                            <span class="flex items-center text-gray-400"><span class="w-2 h-0.5 border-t border-dashed border-gray-400 mr-1"></span> 30 dias</span>
                         </div>
+                        <div id="chart-resumo" class="h-24 w-full relative"></div>
                     </div>
                 </div>
 
                 <!-- KPI 4 -->
                 <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100 flex flex-col justify-between">
-                    <h3 class="text-xs font-medium text-gray-500 mb-1 uppercase">Acesso ao Pagamento</h3>
-                    <div id="kpi-checkout-hoje" class="text-3xl font-bold text-gray-900 mb-4">--</div>
-                    <div class="flex flex-col space-y-1 text-xs">
-                        <div class="flex justify-between border-b border-gray-50 pb-1">
-                            <span class="text-gray-500">vs Média 30d</span>
-                            <span id="kpi-checkout-30d" class="font-medium text-gray-400">--</span>
+                    <div>
+                        <h3 class="text-xs font-medium text-gray-500 mb-1 uppercase">Acesso ao Pagamento</h3>
+                        <div id="kpi-checkout-hoje" class="text-3xl font-bold text-gray-900 mb-4">--</div>
+                        <div class="flex flex-col space-y-1 text-xs">
+                            <div class="flex justify-between border-b border-gray-50 pb-1">
+                                <span class="text-gray-500">vs Média 30d</span>
+                                <span id="kpi-checkout-30d" class="font-medium text-gray-400">--</span>
+                            </div>
+                            <div class="flex justify-between pt-1">
+                                <span class="text-gray-500">vs Média 90d</span>
+                                <span id="kpi-checkout-90d" class="font-medium text-gray-400">--</span>
+                            </div>
                         </div>
-                        <div class="flex justify-between pt-1">
-                            <span class="text-gray-500">vs Média 90d</span>
-                            <span id="kpi-checkout-90d" class="font-medium text-gray-400">--</span>
+                    </div>
+                    <div class="border-t border-gray-100 pt-3 mt-4">
+                        <div class="flex items-center justify-between text-[10px] mb-2">
+                            <span class="flex items-center text-primary font-medium"><span class="w-2 h-0.5 bg-primary mr-1"></span> Atual (D-1)</span>
+                            <span class="flex items-center text-gray-400"><span class="w-2 h-0.5 border-t border-dashed border-gray-400 mr-1"></span> 30 dias</span>
                         </div>
+                        <div id="chart-checkout" class="h-24 w-full relative"></div>
                     </div>
                 </div>
 
                 <!-- KPI 5 -->
                 <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100 flex flex-col justify-between">
-                    <h3 class="text-xs font-medium text-gray-500 mb-1 uppercase">Compras Concluídas</h3>
-                    <div id="kpi-compras-hoje" class="text-3xl font-bold text-gray-900 mb-4">--</div>
-                    <div class="flex flex-col space-y-1 text-xs">
-                        <div class="flex justify-between border-b border-gray-50 pb-1">
-                            <span class="text-gray-500">vs Média 30d</span>
-                            <span id="kpi-compras-30d" class="font-medium text-gray-400">--</span>
+                    <div>
+                        <h3 class="text-xs font-medium text-gray-500 mb-1 uppercase">Compras Concluídas</h3>
+                        <div id="kpi-compras-hoje" class="text-3xl font-bold text-gray-900 mb-4">--</div>
+                        <div class="flex flex-col space-y-1 text-xs">
+                            <div class="flex justify-between border-b border-gray-50 pb-1">
+                                <span class="text-gray-500">vs Média 30d</span>
+                                <span id="kpi-compras-30d" class="font-medium text-gray-400">--</span>
+                            </div>
+                            <div class="flex justify-between pt-1">
+                                <span class="text-gray-500">vs Média 90d</span>
+                                <span id="kpi-compras-90d" class="font-medium text-gray-400">--</span>
+                            </div>
                         </div>
-                        <div class="flex justify-between pt-1">
-                            <span class="text-gray-500">vs Média 90d</span>
-                            <span id="kpi-compras-90d" class="font-medium text-gray-400">--</span>
+                    </div>
+                    <div class="border-t border-gray-100 pt-3 mt-4">
+                        <div class="flex items-center justify-between text-[10px] mb-2">
+                            <span class="flex items-center text-primary font-medium"><span class="w-2 h-0.5 bg-primary mr-1"></span> Atual (D-1)</span>
+                            <span class="flex items-center text-gray-400"><span class="w-2 h-0.5 border-t border-dashed border-gray-400 mr-1"></span> 30 dias</span>
                         </div>
+                        <div id="chart-compras" class="h-24 w-full relative"></div>
                     </div>
                 </div>
             </div>
@@ -309,6 +354,160 @@
                 updateKPI('kpi-resumo', 'resumo');
                 updateKPI('kpi-checkout', 'checkout');
                 updateKPI('kpi-compras', 'compras');
+
+                // Atualizar gráficos SVG (Fallback se charts não existir)
+                if (data.charts && data.charts.baseline30 && data.charts.current) {
+                    const renderChart = (containerId, baselineData, currentData) => {
+                        const container = document.getElementById(containerId);
+                        if (!container) return;
+                        
+                        let tooltip = document.getElementById('chart-tooltip');
+                        if (!tooltip) {
+                            tooltip = document.createElement('div');
+                            tooltip.id = 'chart-tooltip';
+                            tooltip.className = 'absolute z-50 bg-gray-800 text-white text-xs rounded py-1.5 px-2.5 pointer-events-none transform -translate-x-1/2 -translate-y-full opacity-0 transition-opacity duration-200 shadow-lg';
+                            document.body.appendChild(tooltip);
+                        }
+
+                        container.innerHTML = '';
+                        const width = container.clientWidth || 200;
+                        const height = container.clientHeight || 96;
+                        
+                        const paddingX = 4;
+                        const paddingY = 8;
+                        const drawW = width - paddingX * 2;
+                        const drawH = height - paddingY * 2;
+                        const maxPoints = 22;
+                        
+                        let maxVal = 0, minVal = Infinity;
+                        baselineData.forEach(d => { if(d.value > maxVal) maxVal = d.value; if(d.value < minVal) minVal = d.value; });
+                        currentData.forEach(d => { if(d.value > maxVal) maxVal = d.value; if(d.value < minVal) minVal = d.value; });
+                        if (minVal === Infinity) minVal = 0;
+                        const range = maxVal - minVal;
+                        const min = Math.max(0, minVal - range * 0.1);
+                        const max = maxVal + range * 0.1;
+                        const finalRange = max - min || 1;
+                        
+                        const getX = (i) => paddingX + (i / (maxPoints - 1)) * drawW;
+                        const getY = (val) => paddingY + drawH - ((val - min) / finalRange) * drawH;
+                        
+                        const formatDt = (dtStr) => {
+                            const p = dtStr.split('-');
+                            return p.length === 3 ? `${p[2]}/${p[1]}` : dtStr;
+                        };
+
+                        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                        svg.setAttribute('width', '100%');
+                        svg.setAttribute('height', '100%');
+                        svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+                        svg.style.overflow = 'visible';
+
+                        let baseD = '';
+                        let areaD = '';
+                        baselineData.forEach((pt, i) => {
+                            if (i >= maxPoints) return;
+                            const x = getX(i), y = getY(pt.value);
+                            baseD += (i === 0 ? `M ${x},${y}` : ` L ${x},${y}`);
+                            areaD += (i === 0 ? `M ${x},${y}` : ` L ${x},${y}`);
+                        });
+                        
+                        if (baselineData.length > 0) {
+                            const lastX = getX(Math.min(maxPoints - 1, baselineData.length - 1));
+                            areaD += ` L ${lastX},${height} L ${getX(0)},${height} Z`;
+                            const areaPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                            areaPath.setAttribute('d', areaD);
+                            areaPath.setAttribute('fill', '#F1F5F9');
+                            areaPath.setAttribute('opacity', '0.5');
+                            svg.appendChild(areaPath);
+
+                            const basePath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                            basePath.setAttribute('d', baseD);
+                            basePath.setAttribute('fill', 'none');
+                            basePath.setAttribute('stroke', '#94A3B8');
+                            basePath.setAttribute('stroke-width', '1.5');
+                            basePath.setAttribute('stroke-dasharray', '3,3');
+                            svg.appendChild(basePath);
+                        }
+
+                        let currD = '';
+                        currentData.forEach((pt, i) => {
+                            if (i >= maxPoints) return;
+                            const x = getX(i), y = getY(pt.value);
+                            currD += (i === 0 ? `M ${x},${y}` : ` L ${x},${y}`);
+                        });
+                        
+                        if (currD) {
+                            const currPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                            currPath.setAttribute('d', currD);
+                            currPath.setAttribute('fill', 'none');
+                            currPath.setAttribute('stroke', '#FF6B00');
+                            currPath.setAttribute('stroke-width', '2.5');
+                            svg.appendChild(currPath);
+                        }
+
+                        for (let i = 0; i < maxPoints; i++) {
+                            const basePt = baselineData[i];
+                            const currPt = currentData[i];
+                            const x = getX(i);
+                            
+                            const rectWidth = drawW / (maxPoints - 1);
+                            const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                            rect.setAttribute('x', x - rectWidth / 2);
+                            rect.setAttribute('y', 0);
+                            rect.setAttribute('width', rectWidth);
+                            rect.setAttribute('height', height);
+                            rect.setAttribute('fill', 'transparent');
+                            rect.style.cursor = 'crosshair';
+                            
+                            const hoverLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                            hoverLine.setAttribute('x1', x);
+                            hoverLine.setAttribute('x2', x);
+                            hoverLine.setAttribute('y1', 0);
+                            hoverLine.setAttribute('y2', height);
+                            hoverLine.setAttribute('stroke', '#CBD5E1');
+                            hoverLine.setAttribute('stroke-width', '1');
+                            hoverLine.style.opacity = '0';
+                            
+                            svg.appendChild(hoverLine);
+                            
+                            if (currPt) {
+                                const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                                circle.setAttribute('cx', x);
+                                circle.setAttribute('cy', getY(currPt.value));
+                                circle.setAttribute('r', '3.5');
+                                circle.setAttribute('fill', '#FFFFFF');
+                                circle.setAttribute('stroke', '#FF6B00');
+                                circle.setAttribute('stroke-width', '2');
+                                svg.appendChild(circle);
+                            }
+
+                            rect.addEventListener('mouseenter', () => {
+                                hoverLine.style.opacity = '1';
+                                tooltip.style.opacity = '1';
+                                let html = `<div class="font-bold mb-1 border-b border-gray-600 pb-1">Dia útil #${i+1}</div>`;
+                                if (currPt) html += `<div class="text-[#FF6B00] mb-0.5">Atual (${formatDt(currPt.date)}): <span class="font-semibold">${fmtNum(currPt.value)}</span></div>`;
+                                if (basePt) html += `<div class="text-gray-300">30d (${formatDt(basePt.date)}): <span class="font-semibold">${fmtNum(basePt.value)}</span></div>`;
+                                tooltip.innerHTML = html;
+                            });
+                            rect.addEventListener('mousemove', (e) => {
+                                tooltip.style.left = e.pageX + 'px';
+                                tooltip.style.top = (e.pageY - 15) + 'px';
+                            });
+                            rect.addEventListener('mouseleave', () => {
+                                hoverLine.style.opacity = '0';
+                                tooltip.style.opacity = '0';
+                            });
+                            svg.appendChild(rect);
+                        }
+                        container.appendChild(svg);
+                    };
+
+                    ['buscas', 'carrinho', 'resumo', 'checkout', 'compras'].forEach(k => {
+                        if(data.charts.baseline30[k] && data.charts.current[k]) {
+                            renderChart(`chart-${k}`, data.charts.baseline30[k], data.charts.current[k]);
+                        }
+                    });
+                }
 
                 // Atualizar bloco de Funil (Taxas %)
                 const updateFunnel = (idPrefix, key) => {
