@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-20T22:22:20.389Z",
+  "updatedAt": "2026-10-21T00:03:58.241Z",
   "weekdaysOnly": true,
   "checkoutUsesPageView": true,
   "kpiWeekdaysCount": 3,
@@ -554,8 +554,8 @@
   },
   "funnel": {
     "today": {
-      "cadastro": 28.2,
-      "login": 19.6,
+      "cadastro": 27.8,
+      "login": 19.8,
       "geral": 3.1
     },
     "baseline30": {
@@ -573,7 +573,7 @@
     {
       "tela": "Aqui ads",
       "volume": 169,
-      "conversao": 68.7
+      "conversao": 68.4
     },
     {
       "tela": "Resumo - Aqui ads",
@@ -582,8 +582,8 @@
     },
     {
       "tela": "Resultados - Aqui ads",
-      "volume": 28,
-      "conversao": 11.4
+      "volume": 29,
+      "conversao": 11.7
     },
     {
       "tela": "Assistente de anúncios - Aqui ads",
@@ -601,17 +601,17 @@
       "conversao": 0.8
     },
     {
-      "tela": "Alqia - Aqui ads",
-      "volume": 1,
-      "conversao": 0.4
-    },
-    {
       "tela": "Shopping Mueller - Aqui ads",
       "volume": 1,
       "conversao": 0.4
     },
     {
       "tela": "Sua campanha está no ar! - Aqui ads",
+      "volume": 1,
+      "conversao": 0.4
+    },
+    {
+      "tela": "Alqia - Aqui ads",
       "volume": 1,
       "conversao": 0.4
     }
