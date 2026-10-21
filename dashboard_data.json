@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-21T06:39:12.186Z",
+  "updatedAt": "2026-10-21T07:46:08.206Z",
   "weekdaysOnly": true,
   "checkoutUsesPageView": true,
   "kpiWeekdaysCount": 4,
@@ -621,17 +621,17 @@
       "conversao": 0.8
     },
     {
-      "tela": "Alqia - Aqui ads",
-      "volume": 1,
-      "conversao": 0.4
-    },
-    {
       "tela": "Shopping Mueller - Aqui ads",
       "volume": 1,
       "conversao": 0.4
     },
     {
       "tela": "Sua campanha está no ar! - Aqui ads",
+      "volume": 1,
+      "conversao": 0.4
+    },
+    {
+      "tela": "Alqia - Aqui ads",
       "volume": 1,
       "conversao": 0.4
     }
