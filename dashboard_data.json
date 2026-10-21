@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-21T07:46:08.206Z",
+  "updatedAt": "2026-10-21T10:30:40.737Z",
   "weekdaysOnly": true,
   "checkoutUsesPageView": true,
   "kpiWeekdaysCount": 4,
@@ -574,8 +574,8 @@
   },
   "funnel": {
     "today": {
-      "cadastro": 27.8,
-      "login": 19.6,
+      "cadastro": 27.7,
+      "login": 19.5,
       "geral": 3
     },
     "baseline30": {
@@ -593,17 +593,17 @@
     {
       "tela": "Aqui ads",
       "volume": 169,
-      "conversao": 67.6
+      "conversao": 67.3
     },
     {
       "tela": "Resumo - Aqui ads",
       "volume": 33,
-      "conversao": 13.2
+      "conversao": 13.1
     },
     {
       "tela": "Resultados - Aqui ads",
-      "volume": 31,
-      "conversao": 12.4
+      "volume": 32,
+      "conversao": 12.7
     },
     {
       "tela": "Assistente de anúncios - Aqui ads",
