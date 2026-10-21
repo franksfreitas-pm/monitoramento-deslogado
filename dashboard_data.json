@@ -1,14 +1,14 @@
 {
-  "updatedAt": "2026-10-21T01:03:49.157Z",
+  "updatedAt": "2026-10-21T05:12:11.435Z",
   "weekdaysOnly": true,
   "checkoutUsesPageView": true,
-  "kpiWeekdaysCount": 3,
+  "kpiWeekdaysCount": 4,
   "kpis": {
     "today": {
-      "buscas": 932,
-      "carrinho": 555,
-      "resumo": 465,
-      "checkout": 104,
+      "buscas": 1005,
+      "carrinho": 603,
+      "resumo": 473,
+      "checkout": 98,
       "compras": 18
     },
     "baseline30": {
@@ -492,6 +492,10 @@
         {
           "date": "2026-10-19",
           "value": 1184
+        },
+        {
+          "date": "2026-10-20",
+          "value": 1225
         }
       ],
       "carrinho": [
@@ -506,6 +510,10 @@
         {
           "date": "2026-10-19",
           "value": 694
+        },
+        {
+          "date": "2026-10-20",
+          "value": 748
         }
       ],
       "resumo": [
@@ -520,6 +528,10 @@
         {
           "date": "2026-10-19",
           "value": 569
+        },
+        {
+          "date": "2026-10-20",
+          "value": 497
         }
       ],
       "checkout": [
@@ -534,6 +546,10 @@
         {
           "date": "2026-10-19",
           "value": 121
+        },
+        {
+          "date": "2026-10-20",
+          "value": 80
         }
       ],
       "compras": [
@@ -548,6 +564,10 @@
         {
           "date": "2026-10-19",
           "value": 19
+        },
+        {
+          "date": "2026-10-20",
+          "value": 20
         }
       ]
     }
@@ -555,8 +575,8 @@
   "funnel": {
     "today": {
       "cadastro": 27.8,
-      "login": 19.8,
-      "geral": 3.1
+      "login": 19.7,
+      "geral": 3
     },
     "baseline30": {
       "cadastro": 31.4,
@@ -573,22 +593,22 @@
     {
       "tela": "Aqui ads",
       "volume": 169,
-      "conversao": 68.4
+      "conversao": 67.6
     },
     {
       "tela": "Resumo - Aqui ads",
       "volume": 33,
-      "conversao": 13.4
+      "conversao": 13.2
     },
     {
       "tela": "Resultados - Aqui ads",
-      "volume": 29,
-      "conversao": 11.7
+      "volume": 31,
+      "conversao": 12.4
     },
     {
       "tela": "Assistente de anúncios - Aqui ads",
-      "volume": 6,
-      "conversao": 2.4
+      "volume": 7,
+      "conversao": 2.8
     },
     {
       "tela": "MSD Saúde Animal - Aqui ads",
