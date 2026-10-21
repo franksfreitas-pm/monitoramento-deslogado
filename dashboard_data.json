@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-21T13:41:24.705Z",
+  "updatedAt": "2026-10-21T15:31:35.769Z",
   "weekdaysOnly": true,
   "checkoutUsesPageView": true,
   "kpiWeekdaysCount": 4,
@@ -574,8 +574,8 @@
   },
   "funnel": {
     "today": {
-      "cadastro": 27.8,
-      "login": 19.5,
+      "cadastro": 28.2,
+      "login": 19.9,
       "geral": 3
     },
     "baseline30": {
@@ -592,23 +592,23 @@
   "origins": [
     {
       "tela": "Aqui ads",
-      "volume": 174,
-      "conversao": 67.2
+      "volume": 178,
+      "conversao": 67.7
     },
     {
       "tela": "Resultados - Aqui ads",
       "volume": 33,
-      "conversao": 12.7
+      "conversao": 12.5
     },
     {
       "tela": "Resumo - Aqui ads",
       "volume": 33,
-      "conversao": 12.7
+      "conversao": 12.5
     },
     {
       "tela": "Assistente de anúncios - Aqui ads",
       "volume": 8,
-      "conversao": 3.1
+      "conversao": 3
     },
     {
       "tela": "MSD Saúde Animal - Aqui ads",
