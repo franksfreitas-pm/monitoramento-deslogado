@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-22T05:29:32.405Z",
+  "updatedAt": "2026-10-22T07:27:12.574Z",
   "weekdaysOnly": true,
   "checkoutUsesPageView": true,
   "kpiWeekdaysCount": 5,
@@ -613,17 +613,17 @@
     {
       "tela": "Aqui ads",
       "volume": 190,
-      "conversao": 65.3
+      "conversao": 65.1
     },
     {
       "tela": "Resultados - Aqui ads",
-      "volume": 39,
-      "conversao": 13.4
+      "volume": 40,
+      "conversao": 13.7
     },
     {
       "tela": "Resumo - Aqui ads",
       "volume": 36,
-      "conversao": 12.4
+      "conversao": 12.3
     },
     {
       "tela": "Assistente de anúncios - Aqui ads",
@@ -641,11 +641,6 @@
       "conversao": 0.7
     },
     {
-      "tela": "Alqia - Aqui ads",
-      "volume": 1,
-      "conversao": 0.3
-    },
-    {
       "tela": "Onde Anunciar | Aqui Ads - Globo & OOH - Aqui ads",
       "volume": 1,
       "conversao": 0.3
@@ -657,6 +652,11 @@
     },
     {
       "tela": "Shopping Mueller - Aqui ads",
+      "volume": 1,
+      "conversao": 0.3
+    },
+    {
+      "tela": "Sua campanha está no ar! - Aqui ads",
       "volume": 1,
       "conversao": 0.3
     }
