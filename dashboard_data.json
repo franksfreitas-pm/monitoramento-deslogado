@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-22T07:27:12.574Z",
+  "updatedAt": "2026-10-22T10:41:34.407Z",
   "weekdaysOnly": true,
   "checkoutUsesPageView": true,
   "kpiWeekdaysCount": 5,
@@ -594,8 +594,8 @@
   },
   "funnel": {
     "today": {
-      "cadastro": 30.4,
-      "login": 20.2,
+      "cadastro": 30.6,
+      "login": 20.1,
       "geral": 3.1
     },
     "baseline30": {
@@ -612,8 +612,8 @@
   "origins": [
     {
       "tela": "Aqui ads",
-      "volume": 190,
-      "conversao": 65.1
+      "volume": 191,
+      "conversao": 65.2
     },
     {
       "tela": "Resultados - Aqui ads",
@@ -641,12 +641,7 @@
       "conversao": 0.7
     },
     {
-      "tela": "Onde Anunciar | Aqui Ads - Globo & OOH - Aqui ads",
-      "volume": 1,
-      "conversao": 0.3
-    },
-    {
-      "tela": "Identificação - Aqui ads",
+      "tela": "Alqia - Aqui ads",
       "volume": 1,
       "conversao": 0.3
     },
@@ -657,6 +652,11 @@
     },
     {
       "tela": "Sua campanha está no ar! - Aqui ads",
+      "volume": 1,
+      "conversao": 0.3
+    },
+    {
+      "tela": "Identificação - Aqui ads",
       "volume": 1,
       "conversao": 0.3
     }
