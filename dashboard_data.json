@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-22T00:16:31.506Z",
+  "updatedAt": "2026-10-22T01:25:33.556Z",
   "weekdaysOnly": true,
   "checkoutUsesPageView": true,
   "kpiWeekdaysCount": 4,
@@ -575,8 +575,8 @@
   "funnel": {
     "today": {
       "cadastro": 29.6,
-      "login": 20.3,
-      "geral": 3
+      "login": 20.2,
+      "geral": 3.1
     },
     "baseline30": {
       "cadastro": 31.4,
@@ -592,23 +592,23 @@
   "origins": [
     {
       "tela": "Aqui ads",
-      "volume": 188,
-      "conversao": 65.3
+      "volume": 190,
+      "conversao": 65.5
     },
     {
       "tela": "Resultados - Aqui ads",
       "volume": 38,
-      "conversao": 13.2
+      "conversao": 13.1
     },
     {
       "tela": "Resumo - Aqui ads",
       "volume": 36,
-      "conversao": 12.5
+      "conversao": 12.4
     },
     {
       "tela": "Assistente de anúncios - Aqui ads",
       "volume": 10,
-      "conversao": 3.5
+      "conversao": 3.4
     },
     {
       "tela": "MSD Saúde Animal - Aqui ads",
@@ -621,12 +621,12 @@
       "conversao": 0.7
     },
     {
-      "tela": "Identificação - Aqui ads",
+      "tela": "Shopping Mueller - Aqui ads",
       "volume": 1,
       "conversao": 0.3
     },
     {
-      "tela": "Onde Anunciar | Aqui Ads - Globo & OOH - Aqui ads",
+      "tela": "Sua campanha está no ar! - Aqui ads",
       "volume": 1,
       "conversao": 0.3
     },
@@ -636,7 +636,7 @@
       "conversao": 0.3
     },
     {
-      "tela": "Shopping Mueller - Aqui ads",
+      "tela": "Onde Anunciar | Aqui Ads - Globo & OOH - Aqui ads",
       "volume": 1,
       "conversao": 0.3
     }
