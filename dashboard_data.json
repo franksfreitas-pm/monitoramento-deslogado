@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-23T06:35:41.124Z",
+  "updatedAt": "2026-10-23T07:39:18.062Z",
   "weekdaysOnly": true,
   "checkoutUsesPageView": true,
   "kpiWeekdaysCount": 6,
@@ -614,7 +614,7 @@
   },
   "funnel": {
     "today": {
-      "cadastro": 33.2,
+      "cadastro": 33,
       "login": 19.8,
       "geral": 2.8
     },
@@ -661,17 +661,17 @@
       "conversao": 0.6
     },
     {
-      "tela": "Alqia - Aqui ads",
-      "volume": 1,
-      "conversao": 0.3
-    },
-    {
       "tela": "Shopping Mueller - Aqui ads",
       "volume": 1,
       "conversao": 0.3
     },
     {
       "tela": "Sua campanha está no ar! - Aqui ads",
+      "volume": 1,
+      "conversao": 0.3
+    },
+    {
+      "tela": "Onde Anunciar | Aqui Ads - Globo & OOH - Aqui ads",
       "volume": 1,
       "conversao": 0.3
     },
