@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-22T22:14:33.743Z",
+  "updatedAt": "2026-10-23T01:03:02.792Z",
   "weekdaysOnly": true,
   "checkoutUsesPageView": true,
   "kpiWeekdaysCount": 5,
@@ -594,8 +594,8 @@
   },
   "funnel": {
     "today": {
-      "cadastro": 32.3,
-      "login": 20.1,
+      "cadastro": 32.6,
+      "login": 20,
       "geral": 2.7
     },
     "baseline30": {
@@ -612,18 +612,18 @@
   "origins": [
     {
       "tela": "Aqui ads",
-      "volume": 226,
+      "volume": 228,
       "conversao": 65.7
     },
     {
       "tela": "Resultados - Aqui ads",
-      "volume": 45,
-      "conversao": 13.1
+      "volume": 46,
+      "conversao": 13.3
     },
     {
       "tela": "Resumo - Aqui ads",
       "volume": 44,
-      "conversao": 12.8
+      "conversao": 12.7
     },
     {
       "tela": "MSD Saúde Animal - Aqui ads",
@@ -641,12 +641,7 @@
       "conversao": 0.6
     },
     {
-      "tela": "Onde Anunciar | Aqui Ads - Globo & OOH - Aqui ads",
-      "volume": 1,
-      "conversao": 0.3
-    },
-    {
-      "tela": "Identificação - Aqui ads",
+      "tela": "Alqia - Aqui ads",
       "volume": 1,
       "conversao": 0.3
     },
@@ -657,6 +652,11 @@
     },
     {
       "tela": "Sua campanha está no ar! - Aqui ads",
+      "volume": 1,
+      "conversao": 0.3
+    },
+    {
+      "tela": "Identificação - Aqui ads",
       "volume": 1,
       "conversao": 0.3
     }
