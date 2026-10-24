@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-24T12:15:25.323Z",
+  "updatedAt": "2026-10-24T14:25:19.304Z",
   "weekdaysOnly": true,
   "checkoutUsesPageView": true,
   "kpiWeekdaysCount": 7,
@@ -681,6 +681,11 @@
       "conversao": 0.5
     },
     {
+      "tela": "Óticas Carol | Franquias - Aqui ads",
+      "volume": 1,
+      "conversao": 0.2
+    },
+    {
       "tela": "Shopping Mueller - Aqui ads",
       "volume": 1,
       "conversao": 0.2
@@ -692,11 +697,6 @@
     },
     {
       "tela": "Alqia - Aqui ads",
-      "volume": 1,
-      "conversao": 0.2
-    },
-    {
-      "tela": "Onde Anunciar | Aqui Ads - Globo & OOH - Aqui ads",
       "volume": 1,
       "conversao": 0.2
     }
