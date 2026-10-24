@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-23T23:34:48.012Z",
+  "updatedAt": "2026-10-24T00:27:52.446Z",
   "weekdaysOnly": true,
   "checkoutUsesPageView": true,
   "kpiWeekdaysCount": 6,
@@ -615,7 +615,7 @@
   "funnel": {
     "today": {
       "cadastro": 31.3,
-      "login": 20,
+      "login": 19.9,
       "geral": 2.8
     },
     "baseline30": {
@@ -633,17 +633,17 @@
     {
       "tela": "Aqui ads",
       "volume": 268,
-      "conversao": 66
+      "conversao": 65.8
     },
     {
       "tela": "Resumo - Aqui ads",
-      "volume": 52,
-      "conversao": 12.8
+      "volume": 53,
+      "conversao": 13
     },
     {
       "tela": "Resultados - Aqui ads",
       "volume": 51,
-      "conversao": 12.6
+      "conversao": 12.5
     },
     {
       "tela": "MSD Saúde Animal - Aqui ads",
@@ -653,7 +653,7 @@
     {
       "tela": "Assistente de anúncios - Aqui ads",
       "volume": 12,
-      "conversao": 3
+      "conversao": 2.9
     },
     {
       "tela": "Login - Aqui ads",
@@ -661,7 +661,7 @@
       "conversao": 0.5
     },
     {
-      "tela": "Alqia - Aqui ads",
+      "tela": "Onde Anunciar | Aqui Ads - Globo & OOH - Aqui ads",
       "volume": 1,
       "conversao": 0.2
     },
@@ -671,12 +671,12 @@
       "conversao": 0.2
     },
     {
-      "tela": "Onde Anunciar | Aqui Ads - Globo & OOH - Aqui ads",
+      "tela": "Alqia - Aqui ads",
       "volume": 1,
       "conversao": 0.2
     },
     {
-      "tela": "Óticas Carol | Franquias - Aqui ads",
+      "tela": "Shopping Mueller - Aqui ads",
       "volume": 1,
       "conversao": 0.2
     }
