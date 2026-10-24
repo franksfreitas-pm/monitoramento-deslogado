@@ -1,14 +1,14 @@
 {
-  "updatedAt": "2026-10-24T02:01:52.432Z",
+  "updatedAt": "2026-10-24T05:39:26.843Z",
   "weekdaysOnly": true,
   "checkoutUsesPageView": true,
-  "kpiWeekdaysCount": 6,
+  "kpiWeekdaysCount": 7,
   "kpis": {
     "today": {
-      "buscas": 1033,
-      "carrinho": 698,
-      "resumo": 474,
-      "checkout": 88,
+      "buscas": 1045,
+      "carrinho": 657,
+      "resumo": 473,
+      "checkout": 90,
       "compras": 19
     },
     "baseline30": {
@@ -504,6 +504,10 @@
         {
           "date": "2026-10-22",
           "value": 1093
+        },
+        {
+          "date": "2026-10-23",
+          "value": 1119
         }
       ],
       "carrinho": [
@@ -530,6 +534,10 @@
         {
           "date": "2026-10-22",
           "value": 1055
+        },
+        {
+          "date": "2026-10-23",
+          "value": 412
         }
       ],
       "resumo": [
@@ -556,6 +564,10 @@
         {
           "date": "2026-10-22",
           "value": 483
+        },
+        {
+          "date": "2026-10-23",
+          "value": 472
         }
       ],
       "checkout": [
@@ -582,6 +594,10 @@
         {
           "date": "2026-10-22",
           "value": 61
+        },
+        {
+          "date": "2026-10-23",
+          "value": 102
         }
       ],
       "compras": [
@@ -608,6 +624,10 @@
         {
           "date": "2026-10-22",
           "value": 17
+        },
+        {
+          "date": "2026-10-23",
+          "value": 16
         }
       ]
     }
@@ -616,7 +636,7 @@
     "today": {
       "cadastro": 31.1,
       "login": 19.8,
-      "geral": 2.9
+      "geral": 2.8
     },
     "baseline30": {
       "cadastro": 31.4,
@@ -676,7 +696,7 @@
       "conversao": 0.2
     },
     {
-      "tela": "Onde Anunciar | Aqui Ads - Globo & OOH - Aqui ads",
+      "tela": "Alqia - Aqui ads",
       "volume": 1,
       "conversao": 0.2
     }
