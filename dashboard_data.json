@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-24T05:39:26.843Z",
+  "updatedAt": "2026-10-24T07:37:52.824Z",
   "weekdaysOnly": true,
   "checkoutUsesPageView": true,
   "kpiWeekdaysCount": 7,
@@ -681,17 +681,17 @@
       "conversao": 0.5
     },
     {
+      "tela": "Óticas Carol | Franquias - Aqui ads",
+      "volume": 1,
+      "conversao": 0.2
+    },
+    {
       "tela": "Shopping Mueller - Aqui ads",
       "volume": 1,
       "conversao": 0.2
     },
     {
       "tela": "Sua campanha está no ar! - Aqui ads",
-      "volume": 1,
-      "conversao": 0.2
-    },
-    {
-      "tela": "Óticas Carol | Franquias - Aqui ads",
       "volume": 1,
       "conversao": 0.2
     },
